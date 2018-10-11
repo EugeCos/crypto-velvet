@@ -193,7 +193,7 @@ class AddCoin extends Component {
       );
     });
     return (
-      <Fragment>
+      <Fragment className="add-coin-container">
         <div className="custom-button" onClick={this.handleOpen}>
           <h4>+ Add Coin</h4>
         </div>
