@@ -1,0 +1,302 @@
+@import "../../../css/global.less";
+
+.coin-modal-container {
+  margin: 0 50px;
+  @media screen and (max-width: 587px) {
+    margin: 0;
+  }
+}
+
+// Header and wallet --------------------------------
+.header-and-wallet-container {
+  margin-bottom: 35px;
+  padding: 20px 0;
+  align-items: center;
+  @media screen and (max-width: 587px) {
+    h2 {
+      font-size: 95%;
+    }
+    h4 {
+      font-size: 84%;
+    }
+  }
+  @media screen and (max-width: 725px) {
+    flex-direction: column;
+    padding: 0;
+    margin-bottom: 25px;
+    border-bottom: 1px solid @coin-code-color;
+  }
+
+  h4 {
+    color: @coin-main-color;
+    margin-top: 2px;
+  }
+}
+
+.coin-details {
+  .coin-modal-avatar {
+    border-radius: 30px;
+  }
+  @media screen and (max-width: 725px) {
+    justify-content: center;
+    align-items: center;
+
+    .coin-modal-avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 30px;
+    }
+  }
+}
+
+.modal-header {
+  width: 50%;
+  @media screen and (max-width: 725px) {
+    width: 100%;
+  }
+
+  .low-high-wrapper {
+    margin-top: 20px;
+    flex-direction: column;
+    @media screen and (max-width: 587px) {
+      flex-direction: column !important;
+      align-items: center;
+      margin-top: 15px !important;
+    }
+    @media screen and (max-width: 725px) {
+      flex-direction: row;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+  }
+
+  p {
+    color: rgb(168, 168, 168);
+    font-size: 95%;
+    padding: 3px 0;
+    @media screen and (max-width: 587px) {
+      font-size: 78% !important;
+    }
+    @media screen and (max-width: 1024px) {
+      font-size: 85%;
+    }
+  }
+
+  .percent-change {
+    align-items: center;
+    text-align: center;
+
+    @media screen and (max-width: 725px) {
+      display: none;
+    }
+
+    @media screen and (max-width: 1024px) {
+      span {
+        font-size: 85%;
+      }
+    }
+
+    i {
+      font-size: 130%;
+      margin: 0;
+      @media screen and (max-width: 1024px) {
+        font-size: 100%;
+      }
+    }
+  }
+}
+
+.modal-wallet {
+  width: 50%;
+  text-align: right;
+  @media screen and (max-width: 725px) {
+    margin: 20px 0 30px;
+    text-align: center;
+    width: 100%;
+  }
+
+  p {
+    margin: 0 45px 10px 0;
+    color: @coin-main-color;
+    letter-spacing: 2px;
+    @media screen and (max-width: 587px) {
+      margin: 10px 0;
+      color: @coin-code-color;
+      font-size: 80%;
+    }
+    @media screen and (max-width: 725px) {
+      margin: 10px 0;
+      color: @coin-code-color;
+    }
+  }
+
+  h1 {
+    letter-spacing: 2px;
+    @media screen and (max-width: 587px) {
+      font-size: 130%;
+    }
+  }
+
+  h3 {
+    color: @coin-main-color;
+    font-size: 130%;
+    @media screen and (max-width: 587px) {
+      font-size: 110%;
+    }
+  }
+
+  .modal-holder-coin {
+    display: flex;
+    align-items: center;
+    float: right;
+    margin: 10px 5px 0 0;
+
+    @media screen and (max-width: 725px) {
+      margin: 10px 0 0;
+      justify-content: center;
+      float: initial;
+    }
+
+    .purple-coin {
+      width: 16px;
+      height: 16px;
+      padding-right: 10px;
+      @media screen and (max-width: 587px) {
+        width: 12px;
+        height: 12px;
+      }
+    }
+  }
+}
+
+.d-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.coin-modal-avatar {
+  width: 50px;
+  height: 50px;
+  margin-right: 20px;
+}
+
+// -------------------------------------------
+
+// Holding--------------------------------
+.holding-container {
+  text-align: center;
+
+  h4 {
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    @media screen and (max-width: 587px) {
+      font-size: 80%;
+    }
+  }
+
+  .total-value {
+    margin-top: 10px;
+    color: @coin-main-color;
+    @media screen and (max-width: 587px) {
+      font-size: 70%;
+    }
+  }
+}
+
+.buttons-container {
+  margin-top: 20px;
+
+  @media screen and (max-width: 587px) {
+    margin-top: 15px;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .custom-button {
+    margin: 0 auto;
+    padding: 5px 10px 4px;
+    transition: background 0.3s ease-in-out;
+    @media screen and (max-width: 587px) {
+      padding: 3px 2px 2px;
+      width: 55px;
+    }
+
+    h4 {
+      margin-bottom: 0;
+      letter-spacing: 0;
+      color: #fff;
+    }
+  }
+
+  .btn-buy {
+    margin-right: 40px;
+    background: #27ae60;
+    border: none;
+    @media screen and (max-width: 587px) {
+      margin-right: auto;
+    }
+
+    &:hover {
+      background: #7bed9f;
+    }
+  }
+
+  .btn-sell {
+    margin-left: 40px;
+    background: #9b59b6;
+    border: none;
+    @media screen and (max-width: 587px) {
+      margin-left: auto;
+    }
+
+    &:hover {
+      background: #d980fa;
+    }
+  }
+}
+
+.error-message {
+  margin-top: 15px;
+  color: #d14949;
+  @media screen and (max-width: 587px) {
+    font-size: 85%;
+  }
+}
+
+.corrupt-coin {
+  text-align: center;
+  i {
+    font-size: 200%;
+    margin-bottom: 20px;
+  }
+
+  .custom-button {
+    margin-bottom: 0;
+  }
+
+  .btn-return {
+    margin-top: 25px;
+    background: #95afc0;
+    transition: background 0.3s ease;
+    border: none;
+    @media screen and (max-width: 587px) {
+    }
+
+    &:hover {
+      background: #dcdde1;
+    }
+  }
+
+  @media screen and (max-width: 587px) {
+    i {
+      font-size: 150%;
+      margin-bottom: 10px;
+    }
+    h4 {
+      font-size: 80%;
+    }
+  }
+}

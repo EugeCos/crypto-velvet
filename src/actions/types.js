@@ -1,0 +1,2 @@
+export const UPDATE_WALLET = "UPDATE_WALLET";
+export const GET_SCREEN_WIDTH = "GET_SCREEN_WIDTH";

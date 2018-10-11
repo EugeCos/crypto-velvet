@@ -1,0 +1,47 @@
+.navbar {
+  position: sticky;
+  text-align: center;
+  padding: 30px 0;
+  border-bottom: 1px solid rgb(65, 48, 78);
+  @media screen and (max-width: 480px) {
+    padding: 20px 0;
+    h2 {
+      font-size: 115%;
+    }
+
+    .navbar-logo {
+      letter-spacing: 7px;
+    }
+  }
+
+  h2 {
+    color: rgb(227, 214, 255);
+    display: inline-block;
+  }
+
+  .navbar-logo {
+    text-transform: uppercase;
+    letter-spacing: 10px;
+    text-shadow: 0 0 30px #fff;
+  }
+}
+
+.auth-links-container {
+  position: absolute;
+  right: 20px;
+  top: 40%;
+  font-size: 85%;
+
+  .auth-link {
+    margin: 20px;
+    text-decoration: none;
+    color: rgb(176, 141, 223);
+  }
+
+  .signup {
+    border: 1px solid #d04ed6;
+    color: rgb(235, 226, 255);
+    border-radius: 4px;
+    padding: 6px 15px;
+  }
+}

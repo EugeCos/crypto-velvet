@@ -1,0 +1,164 @@
+@import "../../../../css/global.less";
+
+.coin-wrapper {
+  display: flex;
+  align-items: center;
+  background: rgba(226, 193, 225, 0.03);
+  box-shadow: 1px 0px 10px 1px rgba(186, 155, 207, 0.2);
+  height: 50px;
+  padding: 5px;
+  margin: 18px 0;
+  position: relative;
+
+  @media screen and (max-width: 480px) {
+    padding: 0px;
+    margin: 13px 0;
+  }
+
+  p {
+    color: @coin-main-color;
+  }
+}
+
+.coin-wrapper:hover {
+  background: rgba(226, 193, 225, 0.089);
+  cursor: pointer;
+}
+
+.coin-icon {
+  width: 45px;
+  border-radius: 30px;
+  margin-right: 18px;
+  @media screen and (max-width: 480px) {
+    width: 32px;
+    margin-right: 8px;
+    margin-left: 4px;
+  }
+}
+
+.coin-data {
+  width: 45%;
+
+  p {
+    font-size: 93%;
+    padding-top: 3px;
+  }
+
+  h3 {
+    font-size: 105%;
+  }
+
+  @media screen and (max-width: 480px) {
+    p {
+      font-size: 70%;
+      padding-top: 5px;
+    }
+    h3 {
+      font-size: 85%;
+    }
+  }
+}
+
+.holder-coin {
+  width: 35%;
+  display: flex;
+  align-items: center;
+  margin: auto 0;
+
+  p {
+    display: inline;
+  }
+
+  .purple-coin {
+    width: 16px;
+    height: 16px;
+    padding-right: 10px;
+  }
+
+  @media screen and (max-width: 480px) {
+    .purple-coin {
+      width: 8px;
+      height: 8px;
+      padding: 0 3px 0 5px;
+    }
+    p {
+      font-size: 75%;
+      padding-right: 15px;
+    }
+  }
+}
+
+.holder-amount {
+  padding-right: 30px;
+  @media screen and (min-width: 1024px) {
+    padding-right: 12px;
+  }
+  @media screen and (max-width: 480px) {
+    padding-right: 8px;
+    h3 {
+      font-size: 87%;
+    }
+  }
+}
+
+.fa-times {
+  position: absolute;
+  right: 10px;
+  top: 15%;
+  color: @coin-main-color;
+  font-size: 75%;
+  cursor: pointer;
+  border: 1px solid rgb(105, 105, 105);
+  padding: 3px 5px;
+  border-radius: 25px;
+  transition: color 0.2s ease-in, background 0.2s ease-in;
+  @media screen and (max-width: 480px) {
+    font-size: 60%;
+    padding: 1px 2px;
+    top: 0;
+    right: 1px;
+  }
+  @media screen and (max-width: 1024px) {
+    top: 7%;
+    right: 5px;
+  }
+
+  &:hover {
+    background: rgb(206, 62, 62);
+    color: rgb(238, 238, 238);
+  }
+  &:after {
+    background: initial;
+    color: initial;
+  }
+}
+
+// Starting state of entry animation
+.fade-enter {
+  opacity: 0;
+}
+
+// End state of entry animation
+.fade-enter-active {
+  opacity: 1;
+  transition: 0.4s ease-in all;
+}
+
+// Starting state of exit animation
+.fade-leave {
+  opacity: 1;
+}
+
+// End state of exit animation
+.fade-leave-active {
+  opacity: 0;
+  transition: 0.4s ease-out all;
+}
+
+.empty-list-message {
+  text-align: center;
+  margin-top: 40px;
+  line-height: 40px;
+  color: @coin-main-color;
+  transform: 0.4s all ease-in-out;
+}
