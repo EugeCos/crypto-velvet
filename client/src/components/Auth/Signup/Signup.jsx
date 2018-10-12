@@ -4,12 +4,14 @@ import "../Auth.less";
 // -----------COMPONENTS-----------
 import TextFieldGroup from "../../Common/TextFieldGroup";
 
-export default class Login extends Component {
+export default class Signup extends Component {
   constructor() {
     super();
     this.state = {
-      login: "",
-      password: ""
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: ""
     };
   }
 
@@ -24,17 +26,24 @@ export default class Login extends Component {
   };
 
   render() {
-    const { login, password } = this.state;
+    const { name, email, password, confirmPassword } = this.state;
     return (
       <div className="auth-container">
         <img src="/img/logo.png" alt="" className="logo" />
-        <h4 className="auth-option-text">Login</h4>
+        <h4 className="auth-option-text">Sign Up</h4>
         <form style={{ marginTop: "30px" }} onSubmit={this.handleSubmit}>
           <TextFieldGroup
             type={"text"}
-            name={"login"}
-            placeholder={"Email or login"}
-            value={login}
+            name={"name"}
+            placeholder={"Name"}
+            value={name}
+            handleChange={this.handleChange}
+          />
+          <TextFieldGroup
+            type={"email"}
+            name={"email"}
+            placeholder={"Email"}
+            value={email}
             handleChange={this.handleChange}
           />
           <TextFieldGroup
@@ -44,7 +53,14 @@ export default class Login extends Component {
             value={password}
             handleChange={this.handleChange}
           />
-          <button className="auth-button">Login</button>
+          <TextFieldGroup
+            type={"password"}
+            name={"confirmPassword"}
+            placeholder={"Confirm password"}
+            value={confirmPassword}
+            handleChange={this.handleChange}
+          />
+          <button className="auth-button">Sign Up</button>
         </form>
       </div>
     );

@@ -1,0 +1,39 @@
+{
+  "name": "crypto-velvet",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.18.0",
+    "classnames": "^2.2.6",
+    "font-awesome": "^4.7.0",
+    "lodash": "^4.17.10",
+    "material-ui": "^0.20.2",
+    "react": "^16.4.1",
+    "react-addons-css-transition-group": "^15.6.2",
+    "react-dom": "^16.4.1",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.4",
+    "recompose": "^0.27.1",
+    "redux": "^4.0.0",
+    "redux-promise": "^0.6.0",
+    "redux-thunk": "^2.3.0",
+    "thunk": "0.0.1"
+  },
+  "scripts": {
+    "start": "node scripts/customized-config start",
+    "build": "node scripts/customized-config build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.1",
+    "less": "^3.0.4",
+    "less-loader": "^4.1.0",
+    "less-plugin-autoprefix": "^1.5.1",
+    "prettier": "^1.13.6",
+    "proxyquire": "^2.0.1",
+    "rewire": "^4.0.1"
+  }
+}
