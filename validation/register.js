@@ -15,10 +15,6 @@ module.exports = function validateRegisterInput(data) {
     errors.name = "Name must be between 2 and 20 characters";
   }
 
-  if (!Validator.isEmail(data.email)) {
-    errors.email = "Email is invalid";
-  }
-
   if (!Validator.isLength(data.password, { min: 6, max: 15 })) {
     errors.password = "Password must be at least 6 characters";
   }
