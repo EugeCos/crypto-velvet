@@ -8,7 +8,7 @@
     width: 200px;
     font-size: 14px;
     padding: 3px 15px;
-    margin-bottom: 20px;
+    margin-bottom: 26px;
     border-radius: 2px;
 
     @media screen and (max-width: 480px) {
@@ -21,4 +21,21 @@
       font-size: 17px;
     }
   }
+}
+
+.is-invalid {
+  input[type="text"],
+  input[type="number"],
+  input[type="password"],
+  input[type="email"] {
+    margin-bottom: 0;
+    box-shadow: 0 0 10px #e84393;
+    border: 1px solid #e84393;
+  }
+}
+
+.error-input-container {
+  color: #e84393;
+  font-size: 13px;
+  margin-bottom: 10px;
 }

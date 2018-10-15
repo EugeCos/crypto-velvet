@@ -14,7 +14,7 @@ import Login from "./components/Auth/Login/Login";
 import "./App.css";
 import "./css/global.less";
 
-// -----------FRONT-END API-----------
+// -----------FRONT-END API-------------
 import api from "./api";
 
 // ----------UTILITY FUNCITONS-----------

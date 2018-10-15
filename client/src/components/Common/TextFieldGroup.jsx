@@ -1,5 +1,6 @@
 import React from "react";
 import "./TextFieldGroup.less";
+import classnames from "classnames";
 
 const TextFieldGroup = ({
   name,
@@ -11,7 +12,11 @@ const TextFieldGroup = ({
   handleChange
 }) => {
   return (
-    <div className="custom-textField-group">
+    <div
+      className={classnames("custom-textField-group", {
+        "is-invalid": error
+      })}
+    >
       <input
         type={type}
         placeholder={placeholder}
@@ -19,6 +24,11 @@ const TextFieldGroup = ({
         onChange={handleChange}
         name={name}
       />
+      {error && (
+        <div className="error-input-container">
+          <small className="error-input-message">{error}</small>
+        </div>
+      )}
     </div>
   );
 };

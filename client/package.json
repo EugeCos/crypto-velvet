@@ -6,17 +6,18 @@
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
     "font-awesome": "^4.7.0",
-    "lodash": "^4.17.10",
+    "jwt-decode": "^2.2.0",
     "material-ui": "^0.20.2",
+    "moment": "^2.22.2",
     "react": "^16.4.1",
     "react-addons-css-transition-group": "^15.6.2",
     "react-dom": "^16.4.1",
+    "react-moment": "^0.8.1",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "recompose": "^0.27.1",
     "redux": "^4.0.0",
-    "redux-promise": "^0.6.0",
     "redux-thunk": "^2.3.0",
     "thunk": "0.0.1"
   },
@@ -35,5 +36,6 @@
     "prettier": "^1.13.6",
     "proxyquire": "^2.0.1",
     "rewire": "^4.0.1"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

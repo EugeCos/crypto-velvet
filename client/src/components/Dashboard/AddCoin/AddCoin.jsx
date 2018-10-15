@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import "./AddCoin.less";
 
@@ -193,7 +193,7 @@ class AddCoin extends Component {
       );
     });
     return (
-      <Fragment className="add-coin-container">
+      <span className="add-coin-container">
         <div className="custom-button" onClick={this.handleOpen}>
           <h4>+ Add Coin</h4>
         </div>
@@ -227,7 +227,7 @@ class AddCoin extends Component {
             <ContentAdd />
           </FloatingActionButton>
         </Dialog>
-      </Fragment>
+      </span>
     );
   }
 }
