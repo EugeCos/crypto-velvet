@@ -1,16 +1,28 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import "../Auth.less";
+
+// --------REDUX---------
+import { connect } from "react-redux";
+import { loginUser } from "../../../actions/authActions";
 
 // -----------COMPONENTS-----------
 import TextFieldGroup from "../../Common/TextFieldGroup";
 
-export default class Login extends Component {
+class Login extends Component {
   constructor() {
     super();
     this.state = {
-      login: "",
-      password: ""
+      email: "",
+      password: "",
+      errors: {}
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
   }
 
   handleChange = e => {
@@ -21,21 +33,34 @@ export default class Login extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    const { email, password } = this.state;
+
+    const userLogin = {
+      email,
+      password
+    };
+
+    this.props.loginUser(userLogin);
   };
 
   render() {
-    const { login, password } = this.state;
+    const { email, password, errors } = this.state;
     return (
       <div className="auth-container">
         <img src="/img/logo.png" alt="" className="logo" />
         <h4 className="auth-option-text">Login</h4>
-        <form style={{ marginTop: "30px" }} onSubmit={this.handleSubmit}>
+        <form
+          noValidate
+          style={{ marginTop: "30px" }}
+          onSubmit={this.handleSubmit}
+        >
           <TextFieldGroup
             type={"email"}
-            name={"login"}
+            name={"email"}
             placeholder={"Email"}
-            value={login}
+            value={email}
             handleChange={this.handleChange}
+            error={errors.email}
           />
           <TextFieldGroup
             type={"password"}
@@ -43,6 +68,7 @@ export default class Login extends Component {
             placeholder={"Password"}
             value={password}
             handleChange={this.handleChange}
+            error={errors.password}
           />
           <button className="auth-button">Login</button>
         </form>
@@ -50,3 +76,19 @@ export default class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+  loginUser: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { loginUser }
+)(Login);

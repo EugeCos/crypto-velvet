@@ -1,11 +1,16 @@
 import React, { Component } from "react";
-import axios from "axios";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 import "../Auth.less";
 
 // -----------COMPONENTS-----------
 import TextFieldGroup from "../../Common/TextFieldGroup";
 
-export default class Signup extends Component {
+// ---------REDUX----------
+import { connect } from "react-redux";
+import { registerUser } from "../../../actions/authActions";
+
+class Signup extends Component {
   constructor() {
     super();
     this.state = {
@@ -15,6 +20,14 @@ export default class Signup extends Component {
       confirmPassword: "",
       errors: {}
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({
+        errors: nextProps.errors
+      });
+    }
   }
 
   handleChange = e => {
@@ -34,14 +47,12 @@ export default class Signup extends Component {
       confirmPassword
     };
 
-    axios
-      .post("/api/users/register", newUser)
-      .then(res => console.log(res.data))
-      .catch(err => this.setState({ errors: err.response.data }));
+    this.props.registerUser(newUser, this.props.history);
   };
 
   render() {
     const { name, email, password, confirmPassword, errors } = this.state;
+
     return (
       <div className="auth-container">
         <img src="/img/logo.png" alt="" className="logo" />
@@ -89,3 +100,19 @@ export default class Signup extends Component {
     );
   }
 }
+
+Signup.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  errors: state.errors,
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  { registerUser }
+)(withRouter(Signup));
