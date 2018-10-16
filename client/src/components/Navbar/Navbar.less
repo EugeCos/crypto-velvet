@@ -28,14 +28,17 @@
 
 .auth-links-container {
   position: absolute;
-  right: 20px;
-  top: 40%;
+  right: 30px;
+  top: 23%;
   font-size: 85%;
+  display: flex;
+  align-items: center;
 
   .auth-link {
-    margin: 20px;
+    margin: 0 20px;
     text-decoration: none;
     color: rgb(176, 141, 223);
+    display: inline-block;
   }
 
   .signup {
@@ -48,6 +51,14 @@
       background-color: #cf4ed628;
     }
   }
+
+  .name {
+    margin: 0 0 0 20px;
+  }
+}
+
+.guest-links {
+  top: 33%;
 }
 
 // Link underline effect

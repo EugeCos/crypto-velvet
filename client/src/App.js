@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 /*-------------FONT-AWESOME-------------*/
 import "../node_modules/font-awesome/css/font-awesome.min.css";
@@ -8,6 +9,7 @@ import "../node_modules/font-awesome/css/font-awesome.min.css";
 import Navbar from "./components/Navbar/Navbar";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Signup from "./components/Auth/Signup/Signup";
+import SignupSuccessful from "./components/Auth/SignupSuccessful/SignupSuccessful";
 import Login from "./components/Auth/Login/Login";
 
 // -------------CSS--------------
@@ -17,14 +19,39 @@ import "./css/global.less";
 // -----------FRONT-END API-------------
 import api from "./api";
 
+// --------------REDUX--------------
+import { store } from "./store";
+import { setCurrentUser, logoutUser } from "./actions/authActions";
+
 // ----------UTILITY FUNCITONS-----------
 import { limitDecimals } from "./utils/utils";
+import setAuthToken from "./utils/setAuthToken";
+
+// Check for token in Local Storage
+if (localStorage.jwtToken) {
+  // Set auth token header auth
+  // setAuthToken(localStorage.jwtToken);
+
+  // Decode token and get user info and expiration
+  const decoded = jwt_decode(localStorage.jwtToken);
+
+  // Set user and isAuthenticated
+  store.dispatch(setCurrentUser(decoded));
+
+  // Check for expired token
+  const currentTime = Date.now() / 1000;
+  if (decoded.exp < currentTime) {
+    store.dispatch(logoutUser);
+    // Redirect to login
+    window.location.href = "/login";
+  }
+}
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      intervalIndex: 0,
+      intervalIndex: 0, // Interval index is need needed to kill updateRatesEvery10Sec()
       screenWidth: undefined,
       currencyArray: ["BTC", "ETH", "LTC"],
       allCoins: [],
@@ -350,6 +377,11 @@ class App extends Component {
           />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
+          <Route
+            exact
+            path="/registration-successful"
+            component={SignupSuccessful}
+          />
         </Switch>
         <footer className="footer">
           <span>
