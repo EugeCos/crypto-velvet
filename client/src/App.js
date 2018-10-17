@@ -11,6 +11,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Signup from "./components/Auth/Signup/Signup";
 import SignupSuccessful from "./components/Auth/SignupSuccessful/SignupSuccessful";
 import Login from "./components/Auth/Login/Login";
+import Profile from "./components/Profile/Profile";
 
 // -------------CSS--------------
 import "./App.css";
@@ -29,22 +30,24 @@ import setAuthToken from "./utils/setAuthToken";
 
 // Check for token in Local Storage
 if (localStorage.jwtToken) {
-  // Set auth token header auth
-  // setAuthToken(localStorage.jwtToken);
+  const token = localStorage.jwtToken;
 
   // Decode token and get user info and expiration
-  const decoded = jwt_decode(localStorage.jwtToken);
-
-  // Set user and isAuthenticated
-  store.dispatch(setCurrentUser(decoded));
+  const decoded = jwt_decode(token);
 
   // Check for expired token
   const currentTime = Date.now() / 1000;
   if (decoded.exp < currentTime) {
-    store.dispatch(logoutUser);
+    store.dispatch(logoutUser());
     // Redirect to login
     window.location.href = "/login";
   }
+
+  // Set auth token header auth
+  // setAuthToken(localStorage.jwtToken);
+
+  // Set user and isAuthenticated
+  store.dispatch(setCurrentUser(decoded));
 }
 
 class App extends Component {
@@ -382,6 +385,7 @@ class App extends Component {
             path="/registration-successful"
             component={SignupSuccessful}
           />
+          <Route exact path="/profile" component={Profile} />
         </Switch>
         <footer className="footer">
           <span>

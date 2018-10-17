@@ -3,6 +3,9 @@ import { Link, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import "./SignupSuccessful.less";
 
+// --------COMPONENTS----------
+import ButtonAction from "../../Common/ButtonAction";
+
 // ----------REDUX-----------
 import { connect } from "react-redux";
 
@@ -12,10 +15,6 @@ class SignupSuccessful extends Component {
     this.state = {
       landedFromSignup: false
     };
-  }
-
-  componenWillMount() {
-    console.log("here");
   }
 
   render() {
@@ -30,7 +29,10 @@ class SignupSuccessful extends Component {
         <h3>Thanks for registering {name[0]}!</h3>
         <p>Log in to your account to start your trading journey.</p>
         <Link to="/login">
-          <button className="auth-button success-login-button">Login</button>
+          <ButtonAction
+            name={"Login"}
+            additionalStyle={"success-login-button"}
+          />
         </Link>
       </div>
     ) : (

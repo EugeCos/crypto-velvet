@@ -5,6 +5,7 @@ import "../Auth.less";
 
 // -----------COMPONENTS-----------
 import TextFieldGroup from "../../Common/TextFieldGroup";
+import ButtonAction from "../../Common/ButtonAction";
 
 // ---------REDUX----------
 import { connect } from "react-redux";
@@ -60,7 +61,7 @@ class Signup extends Component {
     const { name, email, password, confirmPassword, errors } = this.state;
 
     return (
-      <div className="auth-container">
+      <div className="custom-container">
         <img src="/img/logo.png" alt="" className="logo" />
         <h4 className="auth-option-text">Sign Up</h4>
         <form
@@ -100,7 +101,7 @@ class Signup extends Component {
             handleChange={this.handleChange}
             error={errors.confirmPassword}
           />
-          <button className="auth-button">Sign Up</button>
+          <ButtonAction name={"Sign Up"} />
         </form>
       </div>
     );

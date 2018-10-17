@@ -8,6 +8,7 @@ import { loginUser } from "../../../actions/authActions";
 
 // -----------COMPONENTS-----------
 import TextFieldGroup from "../../Common/TextFieldGroup";
+import ButtonAction from "../../Common/ButtonAction";
 
 class Login extends Component {
   constructor() {
@@ -19,13 +20,16 @@ class Login extends Component {
     };
   }
 
-  componentDidUpdate() {
+  componentDidMount() {
     if (this.props.auth.isAuthenticated) {
       this.props.history.push("/");
     }
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push("/");
+    }
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
@@ -52,7 +56,7 @@ class Login extends Component {
   render() {
     const { email, password, errors } = this.state;
     return (
-      <div className="auth-container">
+      <div className="custom-container">
         <img src="/img/logo.png" alt="" className="logo" />
         <h4 className="auth-option-text">Login</h4>
         <form
@@ -76,7 +80,7 @@ class Login extends Component {
             handleChange={this.handleChange}
             error={errors.password}
           />
-          <button className="auth-button">Login</button>
+          <ButtonAction name={"Login"} />
         </form>
       </div>
     );

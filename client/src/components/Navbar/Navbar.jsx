@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import "./Navbar.less";
 
 // -------REDUX--------
@@ -58,7 +58,7 @@ class Navbar extends Component {
             maxHeight: "30px",
             borderRadius: "40px"
           }}
-          title="You need to have a gratar account for your picture to display"
+          title="You need a Gravatar account for your picture to display"
         />
         <p className="auth-link name">{user.name}</p>
         <IconMenu
@@ -71,7 +71,18 @@ class Navbar extends Component {
           anchorOrigin={{ horizontal: "right", vertical: "top" }}
           targetOrigin={{ horizontal: "right", vertical: "top" }}
         >
-          <MenuItem primaryText="Profile" />
+          <MenuItem
+            primaryText="Dashboard"
+            onClick={() => this.props.history.push("/")}
+          />
+          <MenuItem
+            primaryText="My Wallet"
+            onClick={() => this.props.history.push("/wallet")}
+          />
+          <MenuItem
+            primaryText="Profile"
+            onClick={() => this.props.history.push("/profile")}
+          />
           <MenuItem primaryText="Log out" onClick={this.onLogoutClick} />
         </IconMenu>
       </Fragment>
@@ -108,4 +119,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { getScreenWidth, logoutUser }
-)(Navbar);
+)(withRouter(Navbar));
