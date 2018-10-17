@@ -11,18 +11,23 @@ import CreateProfile from "./CreateProfile/CreateProfile";
 class Profile extends Component {
   render() {
     const { user } = this.props.auth;
+    const { screenWidth } = this.props.screenWidth;
     return (
-      <div className="custom-container">
-        <CreateProfile user={user} />
+      <div className="custom-container" style={{ width: "60%" }}>
+        <CreateProfile user={user} screenWidth={screenWidth} />
       </div>
     );
   }
 }
 
 Profile.propTypes = {
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  screenWidth: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({ auth: state.auth });
+const mapStateToProps = state => ({
+  auth: state.auth,
+  screenWidth: state.screenWidth
+});
 
 export default connect(mapStateToProps)(Profile);

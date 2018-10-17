@@ -1,34 +1,34 @@
 .App {
-    height: 100%;
-    min-height: 100vh;
-    overflow-x: hidden;
-    background: linear-gradient(#0E111E, #472969);
-    min-height: 100vh;
+  height: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: linear-gradient(#0e111e, #472969);
+  min-height: 100vh;
 }
 
 .footer {
-    position: absolute;
-    bottom: 2%;
-    right: 5%;
-    color: #636e72;
-    font-size: 12px;
-    letter-spacing: 1px;
+  position: absolute;
+  bottom: 2%;
+  right: 5%;
+  color: #636e72;
+  font-size: 12px;
+  letter-spacing: 1px;
 }
 
 .footer-link {
-    text-decoration: none;
-    color: inherit;
-    transition: color 0.2s ease-in-out;
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease-in-out;
 }
 
 .footer-link:hover {
-    color: #ffb8b8;
-    text-shadow: 0 0 10px #ffcccc;
-    cursor: pointer;
+  color: #ffb8b8;
+  text-shadow: 0 0 10px #ffcccc;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 768px) {
-    .footer {
-        display: none;
-    }
+  .footer {
+    display: none;
+  }
 }
