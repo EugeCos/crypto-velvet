@@ -23,6 +23,7 @@ import api from "./api";
 // --------------REDUX--------------
 import { store } from "./store";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
+import { clearCurrentProfile } from "./actions/profileActions";
 
 // ----------UTILITY FUNCITONS-----------
 import { limitDecimals } from "./utils/utils";
@@ -38,13 +39,17 @@ if (localStorage.jwtToken) {
   // Check for expired token
   const currentTime = Date.now() / 1000;
   if (decoded.exp < currentTime) {
+    // Logout user
     store.dispatch(logoutUser());
+
+    // Clear current user's profile
+    store.dispatch(clearCurrentProfile());
     // Redirect to login
     window.location.href = "/login";
   }
 
   // Set auth token header auth
-  // setAuthToken(localStorage.jwtToken);
+  setAuthToken(localStorage.jwtToken);
 
   // Set user and isAuthenticated
   store.dispatch(setCurrentUser(decoded));
@@ -73,9 +78,10 @@ class App extends Component {
       api
         .getRates(url)
         .then(res => {
-          if (res.status === 200) {
-            this.createExchangeRateObject(res.data);
-          }
+          return res.json();
+        })
+        .then(myJson => {
+          this.createExchangeRateObject(myJson);
         })
         .catch(error => console.log(error));
     } else {
@@ -112,25 +118,29 @@ class App extends Component {
   };
 
   getAllCoinsAndAvatars = () => {
-    let coinListUrl =
-        "https://cors-anywhere.herokuapp.com/https://www.cryptocompare.com/api/data/coinlist/",
+    let coinListUrl = "https://min-api.cryptocompare.com/data/all/coinlist",
+      // "https://cors-anywhere.herokuapp.com/https://min-api.cryptocompare.com/data/all/coinlist",
       allCoins = [];
 
     api
       .getAllCoins(coinListUrl)
       .then(res => {
-        if (res.status === 200) {
-          for (let cur in res.data.Data) {
-            allCoins.push({
-              name: cur,
-              coinName: res.data.Data[cur].CoinName,
-              avatar: `https://www.cryptocompare.com/${
-                res.data.Data[cur].ImageUrl
-              }`
-            });
-          }
+        return res.json();
+      })
+      .then(myJson => {
+        console.log(myJson);
+        for (let cur in myJson.Data) {
+          allCoins.push({
+            name: cur,
+            coinName: myJson.Data[cur].CoinName,
+            avatar: `https://www.cryptocompare.com/${myJson.Data[cur].ImageUrl}`
+          });
         }
       })
+      // if (res.status === 200) {
+
+      // }
+      // })
       .then(() =>
         this.setState(
           {
@@ -225,29 +235,33 @@ class App extends Component {
     api
       .getRates(url)
       .then(res => {
-        if (res.status === 200) {
-          let response = res.data.RAW[coin].USD;
-          if (myCoins.length) {
-            newCoin = {
-              name: coin,
-              rateToUSD: limitDecimals(response.PRICE),
-              percentChange24Hr: `${response.CHANGEPCT24HOUR.toFixed(2)}%`,
-              high24Hr: limitDecimals(response.HIGH24HOUR),
-              low24Hr: limitDecimals(response.LOW24HOUR),
-              holding: 0,
-              totalValue: "0.00",
-              avatar: allCoins[coinIndex].avatar,
-              coinName: allCoins[coinIndex].coinName
-            };
-            coinArrayCopy.unshift(newCoin);
-            this.setState({
-              myCoins: coinArrayCopy
-            });
-          } else {
-            this.fetchRates();
-          }
-        }
+        return res.json();
       })
+      .then(myJson => {
+        // if (res.status === 200) {
+        let response = myJson.RAW[coin].USD;
+        if (myCoins.length) {
+          newCoin = {
+            name: coin,
+            rateToUSD: limitDecimals(response.PRICE),
+            percentChange24Hr: `${response.CHANGEPCT24HOUR.toFixed(2)}%`,
+            high24Hr: limitDecimals(response.HIGH24HOUR),
+            low24Hr: limitDecimals(response.LOW24HOUR),
+            holding: 0,
+            totalValue: "0.00",
+            avatar: allCoins[coinIndex].avatar,
+            coinName: allCoins[coinIndex].coinName
+          };
+          coinArrayCopy.unshift(newCoin);
+          this.setState({
+            myCoins: coinArrayCopy
+          });
+        } else {
+          this.fetchRates();
+        }
+        // }
+      })
+
       .catch(error => ifError());
   };
 
@@ -291,15 +305,17 @@ class App extends Component {
       api
         .getRates(url)
         .then(res => {
-          if (res.status === 200) {
-            arrayWithUpdatedRates.forEach(
-              coin =>
-                (coin.rateToUSD = limitDecimals(
-                  res.data.RAW[coin.name].USD.PRICE
-                ))
-            );
-          }
+          return res.json();
         })
+        .then(myJson => {
+          // if (res.status === 200) {
+          arrayWithUpdatedRates.forEach(
+            coin =>
+              (coin.rateToUSD = limitDecimals(myJson.RAW[coin.name].USD.PRICE))
+          );
+          // }
+        })
+
         .catch(error => console.log(error));
       this.setState(
         {
@@ -387,19 +403,6 @@ class App extends Component {
           />
           <Route exact path="/profile" component={Profile} />
         </Switch>
-        <footer className="footer">
-          <span>
-            designed and developed by
-            <span
-              className="footer-link"
-              onClick={() =>
-                window.open("https://github.com/EugeCos", "_blank")
-              }
-            >
-              &nbsp;Eugene Costov
-            </span>
-          </span>
-        </footer>
       </div>
     );
   }

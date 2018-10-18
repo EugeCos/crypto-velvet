@@ -1,6 +1,4 @@
-import axios from "axios";
-
 export default {
-  getRates: url => axios.get(url),
-  getAllCoins: url => axios.get(url)
+  getRates: url => fetch(url),
+  getAllCoins: url => fetch(url)
 };

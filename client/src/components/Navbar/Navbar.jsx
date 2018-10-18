@@ -8,6 +8,7 @@ import "./Navbar.less";
 import { connect } from "react-redux";
 import { getScreenWidth } from "../../actions/screenWidthActions";
 import { logoutUser } from "../../actions/authActions";
+import { clearCurrentProfile } from "../../actions/profileActions";
 
 // ---------MATERIAL UI----------
 import IconMenu from "material-ui/IconMenu";
@@ -23,6 +24,7 @@ class Navbar extends Component {
   onLogoutClick = e => {
     e.preventDefault();
     this.props.logoutUser();
+    this.props.clearCurrentProfile();
   };
 
   render() {
@@ -118,5 +120,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getScreenWidth, logoutUser }
+  { getScreenWidth, logoutUser, clearCurrentProfile }
 )(withRouter(Navbar));

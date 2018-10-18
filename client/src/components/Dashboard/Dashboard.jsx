@@ -4,6 +4,7 @@ import React, { Component, Fragment } from "react";
 import AddCoin from "./AddCoin/AddCoin";
 import CoinListContainer from "./CoinListContainer/CoinListContainer";
 import Wallet from "./Wallet/Wallet";
+import Footer from "../Footer/Footer";
 
 export default class Dashboard extends Component {
   constructor() {
@@ -48,6 +49,7 @@ export default class Dashboard extends Component {
           currencyArray={currencyArray}
         />
         <AddCoin allCoins={allCoins} addCoin={addCoin} />
+        <Footer />
       </Fragment>
     );
   }

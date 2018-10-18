@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 
 // -----------COMPONENTS-----------
 import ButtonAction from "../../Common/ButtonAction";
+import Footer from "../../Footer/Footer";
 
 class CreateProfile extends Component {
   constructor() {
@@ -125,7 +126,11 @@ class CreateProfile extends Component {
           info={"One thing I’ll never do again is"}
           customWidth={customWidth}
         />
-        <ButtonAction callback={this.handleClick} name={"Submit"} />
+        <ButtonAction
+          callback={this.handleClick}
+          name={"Submit"}
+          additionalStyle={"submit-button"}
+        />
       </Fragment>
     ) : (
       <Fragment>
@@ -137,6 +142,7 @@ class CreateProfile extends Component {
           callback={() => this.setState({ createProfileClicked: true })}
           name={"Create profile"}
         />
+        <Footer />
       </Fragment>
     );
     return (
