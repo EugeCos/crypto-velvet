@@ -24,7 +24,39 @@ class Profile extends Component {
     if (profile === null || loading) {
       profileDisplay = <Spinner />;
     } else {
-      profileDisplay = <CreateProfile user={user} screenWidth={screenWidth} />;
+      // Check if logged in user has profile data
+      if (Object.keys(profile).length > 0) {
+        profileDisplay = (
+          <div className="profile-container">
+            <div className="left-side-wrapper">
+              <img src={user.avatar} className="profile-picture" alt="avatar" />
+              <h4>{user.name}</h4>
+              <div className="location-wrapper">
+                <i class="fa fa-map-marker" />
+                <p>{profile.location}</p>
+              </div>
+              <div className="website-wrapper">
+                <i className="fa fa-globe" />
+                <p onClick={() => window.open(profile.website, "_blank")}>
+                  {profile.website}
+                </p>
+              </div>
+            </div>
+            <div className="right-side-wrapper">
+              <p>Most embarrassing song on Spotify:</p>
+              <p>After work you can find me at:</p>
+              <p>What I would do with a million dollars:</p>
+              <p>I won’t shut up about:</p>
+              <p>My most irrational fear is:</p>
+              <p>One thing I’ll never do again is:</p>
+            </div>
+          </div>
+        );
+      } else {
+        profileDisplay = (
+          <CreateProfile user={user} screenWidth={screenWidth} />
+        );
+      }
     }
 
     return (

@@ -78,7 +78,10 @@ router.post(
         ).then(profile => res.json(profile));
       } else {
         // Create and save profile
-        new Profile(profileFields).save().then(profile => res.json(profile));
+        new Profile(profileFields)
+          .save()
+          .then(profile => res.json(profile))
+          .catch(err => console.log(err));
       }
     });
   }

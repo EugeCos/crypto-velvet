@@ -1,10 +1,12 @@
 import React, { Component, Fragment } from "react";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import "./CreateProfile.less";
 import TextFieldGroup from "../../Common/TextFieldGroup";
 
 // ---------REDUX---------
 import { connect } from "react-redux";
+import { createProfile } from "../../../actions/profileActions";
 
 // -----------COMPONENTS-----------
 import ButtonAction from "../../Common/ButtonAction";
@@ -22,8 +24,15 @@ class CreateProfile extends Component {
       whatWouldIDoWithMillion: "",
       iWontShutUpAbout: "",
       myMostIrrationalFear: "",
-      thingIWillNeverDoAgain: ""
+      thingIWillNeverDoAgain: "",
+      errors: {}
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
   }
 
   handleChange = e => {
@@ -32,12 +41,36 @@ class CreateProfile extends Component {
     });
   };
 
-  handleClick = e => {
+  handleSubmit = e => {
     e.preventDefault();
+    const {
+      website,
+      location,
+      mostEmbarassingSong,
+      afterWorkYouCanFindMeAt,
+      whatWouldIDoWithMillion,
+      iWontShutUpAbout,
+      myMostIrrationalFear,
+      thingIWillNeverDoAgain
+    } = this.state;
+
+    const newProfile = {
+      website,
+      location,
+      mostEmbarassingSong,
+      afterWorkYouCanFindMeAt,
+      whatWouldIDoWithMillion,
+      iWontShutUpAbout,
+      myMostIrrationalFear,
+      thingIWillNeverDoAgain
+    };
+
+    this.props.createProfile(newProfile, this.props.history);
   };
 
   render() {
     const { user, screenWidth } = this.props;
+    const { errors } = this.state;
     const {
       createProfileClicked,
       website,
@@ -62,6 +95,7 @@ class CreateProfile extends Component {
           type={"text"}
           info={"Link to your website"}
           customWidth={customWidth}
+          error={errors.website}
         />
         <TextFieldGroup
           name={"location"}
@@ -80,6 +114,7 @@ class CreateProfile extends Component {
           type={"text"}
           info={"Most embarassing song on your Spotify"}
           customWidth={customWidth}
+          error={errors.mostEmbarassingSong}
         />
         <TextFieldGroup
           name={"afterWorkYouCanFindMeAt"}
@@ -127,7 +162,7 @@ class CreateProfile extends Component {
           customWidth={customWidth}
         />
         <ButtonAction
-          callback={this.handleClick}
+          callback={this.handleSubmit}
           name={"Submit"}
           additionalStyle={"submit-button"}
         />
@@ -152,7 +187,15 @@ class CreateProfile extends Component {
 }
 
 CreateProfile.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
-export default connect(null)(CreateProfile);
+const mapStateToProps = state => ({
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { createProfile }
+)(withRouter(CreateProfile));

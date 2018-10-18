@@ -5,6 +5,9 @@ import jwt_decode from "jwt-decode";
 /*-------------FONT-AWESOME-------------*/
 import "../node_modules/font-awesome/css/font-awesome.min.css";
 
+// -------PRIVATE ROUTES WRAPPER-------
+import PrivateRoute from "./components/Common/PrivateRoute";
+
 // ----------COMPONENTS------------
 import Navbar from "./components/Navbar/Navbar";
 import Dashboard from "./components/Dashboard/Dashboard";
@@ -128,7 +131,6 @@ class App extends Component {
         return res.json();
       })
       .then(myJson => {
-        console.log(myJson);
         for (let cur in myJson.Data) {
           allCoins.push({
             name: cur,
@@ -401,7 +403,7 @@ class App extends Component {
             path="/registration-successful"
             component={SignupSuccessful}
           />
-          <Route exact path="/profile" component={Profile} />
+          <PrivateRoute exact path="/profile" component={Profile} />
         </Switch>
       </div>
     );

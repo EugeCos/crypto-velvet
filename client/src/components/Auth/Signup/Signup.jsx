@@ -59,6 +59,8 @@ class Signup extends Component {
 
   render() {
     const { name, email, password, confirmPassword, errors } = this.state;
+    const { screenWidth } = this.props;
+    const customWidth = screenWidth.screenWidth / 5.5;
 
     return (
       <div className="custom-container">
@@ -76,6 +78,7 @@ class Signup extends Component {
             value={name}
             handleChange={this.handleChange}
             error={errors.name}
+            customWidth={customWidth}
           />
           <TextFieldGroup
             type={"email"}
@@ -84,6 +87,7 @@ class Signup extends Component {
             value={email}
             handleChange={this.handleChange}
             error={errors.email}
+            customWidth={customWidth}
           />
           <TextFieldGroup
             type={"password"}
@@ -92,6 +96,7 @@ class Signup extends Component {
             value={password}
             handleChange={this.handleChange}
             error={errors.password}
+            customWidth={customWidth}
           />
           <TextFieldGroup
             type={"password"}
@@ -100,6 +105,7 @@ class Signup extends Component {
             value={confirmPassword}
             handleChange={this.handleChange}
             error={errors.confirmPassword}
+            customWidth={customWidth}
           />
           <ButtonAction name={"Sign Up"} />
         </form>
@@ -111,11 +117,13 @@ class Signup extends Component {
 Signup.propTypes = {
   registerUser: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  screenWidth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   errors: state.errors,
+  screenWidth: state.screenWidth,
   auth: state.auth
 });
 

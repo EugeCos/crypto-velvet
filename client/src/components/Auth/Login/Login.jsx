@@ -55,6 +55,8 @@ class Login extends Component {
 
   render() {
     const { email, password, errors } = this.state;
+    const { screenWidth } = this.props;
+    const customWidth = screenWidth.screenWidth / 5.5;
     return (
       <div className="custom-container">
         <img src="/img/logo.png" alt="" className="logo" />
@@ -71,6 +73,7 @@ class Login extends Component {
             value={email}
             handleChange={this.handleChange}
             error={errors.email}
+            customWidth={customWidth}
           />
           <TextFieldGroup
             type={"password"}
@@ -79,6 +82,7 @@ class Login extends Component {
             value={password}
             handleChange={this.handleChange}
             error={errors.password}
+            customWidth={customWidth}
           />
           <ButtonAction name={"Login"} />
         </form>
@@ -90,11 +94,13 @@ class Login extends Component {
 Login.propTypes = {
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
+  screenWidth: PropTypes.object.isRequired,
   loginUser: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   auth: state.auth,
+  screenWidth: state.screenWidth,
   errors: state.errors
 });
 

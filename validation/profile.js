@@ -16,7 +16,7 @@ module.exports = function validateProfileInput(data) {
 
   if (isEmpty(data.mostEmbarassingSong)) {
     errors.mostEmbarassingSong =
-      "Please let us know which song from your Spotify playlist makes you blush";
+      "* which song from your Spotify playlist makes you blush";
   }
 
   return {

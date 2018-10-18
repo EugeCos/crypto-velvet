@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import "./TextFieldGroup.less";
 import classnames from "classnames";
 
@@ -43,6 +44,17 @@ const TextFieldGroup = ({
       )}
     </div>
   );
+};
+
+TextFieldGroup.propTypes = {
+  name: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  type: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  error: PropTypes.string,
+  inf: PropTypes.string,
+  handleChange: PropTypes.func.isRequired,
+  customWidth: PropTypes.number
 };
 
 export default TextFieldGroup;
