@@ -1,6 +1,7 @@
 import {
   SET_CURRENT_USER,
-  SET_TEMPORARY_USERNAME_UPON_SUCCESSFUL_REGISTRATION
+  SET_TEMPORARY_USERNAME_UPON_SUCCESSFUL_REGISTRATION,
+  UPDATE_USERNAME
 } from "../actions/types";
 import isEmpty from "../validation/is-empty";
 
@@ -18,6 +19,14 @@ export default function(state = initialState, action) {
       return {
         ...state,
         tempUserName: action.payload
+      };
+    case UPDATE_USERNAME:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          name: action.payload
+        }
       };
     default:
       return state;

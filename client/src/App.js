@@ -15,6 +15,7 @@ import Signup from "./components/Auth/Signup/Signup";
 import SignupSuccessful from "./components/Auth/SignupSuccessful/SignupSuccessful";
 import Login from "./components/Auth/Login/Login";
 import Profile from "./components/Profile/Profile";
+import EditProfile from "./components/Profile/EditProfile/EditProfile";
 
 // -------------CSS--------------
 import "./App.css";
@@ -404,6 +405,7 @@ class App extends Component {
             component={SignupSuccessful}
           />
           <PrivateRoute exact path="/profile" component={Profile} />
+          <PrivateRoute exact path="/edit-profile" component={EditProfile} />
         </Switch>
       </div>
     );

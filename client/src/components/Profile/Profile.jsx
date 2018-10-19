@@ -66,10 +66,12 @@ class Profile extends Component {
                   ""
                 )}
 
-                <ButtonAction
-                  name="edit profile"
-                  additionalStyle={"btn-edit-profile"}
-                />
+                <Link to="/edit-profile">
+                  <ButtonAction
+                    name="edit profile"
+                    additionalStyle={"btn-edit-profile"}
+                  />
+                </Link>
                 <Link to="/">
                   <ButtonAction
                     name="dashboard"

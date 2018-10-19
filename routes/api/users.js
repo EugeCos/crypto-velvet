@@ -3,6 +3,7 @@ const router = express.Router();
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const passport = require("passport");
 
 // JWT secret
 const keys = require("../../config/keys");
@@ -105,5 +106,19 @@ router.post("/login", (req, res) => {
       });
   });
 });
+
+// @route      POST api/profile/edit
+// @desc       Update user's name
+// @access     Private
+router.post(
+  "/edit",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    // Get profile fields
+    const name = req.body.name;
+    const id = req.user.id;
+    User.findByIdAndUpdate(id, { name }).then(user => res.json(user));
+  }
+);
 
 module.exports = router;
