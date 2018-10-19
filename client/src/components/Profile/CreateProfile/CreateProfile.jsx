@@ -65,7 +65,7 @@ class CreateProfile extends Component {
       thingIWillNeverDoAgain
     };
 
-    this.props.createProfile(newProfile, this.props.history);
+    this.props.createProfile(newProfile);
   };
 
   render() {

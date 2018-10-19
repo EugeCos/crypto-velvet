@@ -62,7 +62,9 @@ class Navbar extends Component {
           }}
           title="You need a Gravatar account for your picture to display"
         />
-        <p className="auth-link name">{user.name}</p>
+        <Link to="/profile">
+          <p className="auth-link name">{user.name}</p>
+        </Link>
         <IconMenu
           menuStyle={{ font: "Varela Round" }}
           iconButtonElement={
