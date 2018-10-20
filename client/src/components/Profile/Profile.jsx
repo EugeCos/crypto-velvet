@@ -37,6 +37,7 @@ class Profile extends Component {
       if (Object.keys(profile).length > 0) {
         profileDisplay = (
           <Fragment>
+            <h4 className="profile-header">Profile</h4>
             <div className="profile-container">
               {/* ----------NAME, AVATAR AND BUTTONS----------- */}
               <div className="left-side-wrapper">

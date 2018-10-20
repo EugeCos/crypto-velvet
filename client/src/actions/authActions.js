@@ -4,8 +4,7 @@ import {
   GET_ERRORS,
   SET_CURRENT_USER,
   SET_TEMPORARY_USERNAME_UPON_SUCCESSFUL_REGISTRATION,
-  UPDATE_USERNAME,
-  GET_PROFILE
+  UPDATE_USERNAME
 } from "./types";
 import setAuthToken from "../utils/setAuthToken";
 
