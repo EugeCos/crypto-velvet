@@ -23,28 +23,19 @@ class Navbar extends Component {
 
   onLogoutClick = e => {
     e.preventDefault();
-    this.props.logoutUser();
+    this.props.logoutUser(this.props.history);
     this.props.clearCurrentProfile();
   };
 
   render() {
-    const { stopUpdatingEvery10Seconds } = this.props;
     const { isAuthenticated, user } = this.props.auth;
 
     const guestLinks = (
       <Fragment>
-        <Link
-          to="/login"
-          className="auth-link login"
-          onClick={stopUpdatingEvery10Seconds}
-        >
+        <Link to="/login" className="auth-link login">
           Login
         </Link>
-        <Link
-          to="/signup"
-          className="auth-link signup"
-          onClick={stopUpdatingEvery10Seconds}
-        >
+        <Link to="/signup" className="auth-link signup">
           Signup
         </Link>
       </Fragment>

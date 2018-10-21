@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, withRouter } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
 /*-------------FONT-AWESOME-------------*/
@@ -26,6 +26,7 @@ import api from "./api";
 
 // --------------REDUX--------------
 import { store } from "./store";
+import { connect } from "react-redux";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { clearCurrentProfile } from "./actions/profileActions";
 
@@ -363,6 +364,14 @@ class App extends Component {
   };
 
   componentWillMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.setState({
+        currencyArray: this.props.auth.user.portfolio.currencyArray
+      });
+    }
+  }
+
+  componentDidMount() {
     this.fetchRates();
     this.getAllCoinsAndAvatars();
   }
@@ -375,9 +384,10 @@ class App extends Component {
       walletValue,
       walletValueDifference
     } = this.state;
+    console.log(this.props.auth);
     return (
       <div className="App">
-        <Navbar stopUpdatingEvery10Seconds={this.stopUpdatingEvery10Seconds} />
+        <Navbar />
         <Switch>
           <Route
             exact
@@ -397,8 +407,24 @@ class App extends Component {
               />
             )}
           />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/signup" component={Signup} />
+          <Route
+            exact
+            path="/login"
+            render={() => (
+              <Login
+                stopUpdatingEvery10Seconds={this.stopUpdatingEvery10Seconds}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/signup"
+            render={() => (
+              <Signup
+                stopUpdatingEvery10Seconds={this.stopUpdatingEvery10Seconds}
+              />
+            )}
+          />
           <Route
             exact
             path="/registration-successful"
@@ -412,4 +438,8 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default withRouter(connect(mapStateToProps)(App));

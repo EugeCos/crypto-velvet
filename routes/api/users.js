@@ -41,7 +41,13 @@ router.post("/register", (req, res) => {
         name: req.body.name,
         email: req.body.email,
         avatar,
-        password: req.body.password
+        password: req.body.password,
+        portfolio: {
+          currencyArray: [],
+          walletValue: 0,
+          walletDifference: 0,
+          myCoins: []
+        }
       });
 
       bcrypt.genSalt(10, (err, salt) => {
@@ -89,7 +95,8 @@ router.post("/login", (req, res) => {
           const payload = {
             id: user.id,
             name: user.name,
-            avatar: user.avatar
+            avatar: user.avatar,
+            portfolio: user.portfolio
           };
 
           // Sign token

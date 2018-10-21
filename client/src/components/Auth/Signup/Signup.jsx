@@ -27,6 +27,9 @@ class Signup extends Component {
     if (this.props.auth.isAuthenticated) {
       this.props.history.push("/");
     }
+
+    const { stopUpdatingEvery10Seconds } = this.props;
+    stopUpdatingEvery10Seconds();
   }
 
   componentWillReceiveProps(nextProps) {

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import "../Auth.less";
 
@@ -24,6 +25,9 @@ class Login extends Component {
     if (this.props.auth.isAuthenticated) {
       this.props.history.push("/profile");
     }
+
+    const { stopUpdatingEvery10Seconds } = this.props;
+    stopUpdatingEvery10Seconds();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -107,4 +111,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { loginUser }
-)(Login);
+)(withRouter(Login));

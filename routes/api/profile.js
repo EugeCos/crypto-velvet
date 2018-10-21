@@ -32,7 +32,7 @@ router.get(
   }
 );
 
-// @route      POST api/profile/create-profile
+// @route      POST api/profile/
 // @desc       Create or edit user's profile
 // @access     Private
 router.post(

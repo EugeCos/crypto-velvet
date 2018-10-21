@@ -9,7 +9,9 @@ import Footer from "../Footer/Footer";
 export default class Dashboard extends Component {
   constructor() {
     super();
-    this.state = { intervalIndex: 0 };
+    this.state = {
+      intervalIndex: 0 // Interval index is needed to kill updateRatesEvery10Sec()
+    };
   }
   componentWillMount() {
     const { updateRatesEvery10Sec } = this.props;
