@@ -38,6 +38,7 @@ class Coin extends Component {
     const { selectedCoin } = this.state;
     const {
       screenWidth,
+      auth,
       myCoins,
       currencyArray,
       deleteCoin,
@@ -111,7 +112,15 @@ class Coin extends Component {
           </ReactCSSTransitionGroup>
         ) : (
           <h3 className="empty-list-message">
-            Oops, the list is empty.<br />Please lookup a coin.
+            {auth.isAuthenticated ? (
+              <p>
+                You don't have any coins.<br />Please lookup a coin.
+              </p>
+            ) : (
+              <p>
+                Oops, the list is empty.<br />Please lookup a coin.
+              </p>
+            )}
           </h3>
         )}
         <Dialog
@@ -135,7 +144,8 @@ class Coin extends Component {
 }
 
 const mapStateToProps = state => ({
-  screenWidth: state.screenWidth.screenWidth
+  screenWidth: state.screenWidth.screenWidth,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps)(Coin);

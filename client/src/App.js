@@ -27,7 +27,11 @@ import api from "./api";
 // --------------REDUX--------------
 import { store } from "./store";
 import { connect } from "react-redux";
-import { setCurrentUser, logoutUser } from "./actions/authActions";
+import {
+  setCurrentUser,
+  logoutUser,
+  updatePortfolio
+} from "./actions/authActions";
 import { clearCurrentProfile } from "./actions/profileActions";
 
 // ----------UTILITY FUNCITONS-----------
@@ -60,13 +64,15 @@ if (localStorage.jwtToken) {
   store.dispatch(setCurrentUser(decoded));
 }
 
+const initialCoinList = ["BTC", "ETH", "LTC"];
+
 class App extends Component {
   constructor() {
     super();
     this.state = {
       intervalIndex: 0, // Interval index is need needed to kill updateRatesEvery10Sec()
       screenWidth: undefined,
-      currencyArray: ["BTC", "ETH", "LTC"],
+      currencyArray: initialCoinList,
       allCoins: [],
       myCoins: [],
       walletValue: "0.00",
@@ -76,7 +82,6 @@ class App extends Component {
 
   fetchRates = () => {
     const { currencyArray } = this.state;
-
     let url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${currencyArray}&tsyms=USD`;
 
     if (currencyArray.length) {
@@ -94,7 +99,7 @@ class App extends Component {
         {
           myCoins: []
         },
-        () => this.displayAvatars(null)
+        () => this.displayAvatars()
       );
     }
   };
@@ -171,9 +176,15 @@ class App extends Component {
           );
           rates[index].avatar = allCoins[coinIndex].avatar;
           rates[index].coinName = allCoins[coinIndex].coinName;
-          return this.setState({
-            myCoins: rates
-          });
+          return this.setState(
+            {
+              myCoins: rates
+            },
+            () =>
+              store.dispatch(
+                updatePortfolio(this.createUpdatedPortfolioObject())
+              )
+          );
         });
       }
     }
@@ -257,9 +268,15 @@ class App extends Component {
             coinName: allCoins[coinIndex].coinName
           };
           coinArrayCopy.unshift(newCoin);
-          this.setState({
-            myCoins: coinArrayCopy
-          });
+          this.setState(
+            {
+              myCoins: coinArrayCopy
+            },
+            () =>
+              store.dispatch(
+                updatePortfolio(this.createUpdatedPortfolioObject())
+              )
+          );
         } else {
           this.fetchRates();
         }
@@ -294,9 +311,12 @@ class App extends Component {
       return (walletValue += Number(coin.totalValue));
     });
 
-    this.setState({
-      walletValue
-    });
+    this.setState(
+      {
+        walletValue
+      },
+      () => store.dispatch(updatePortfolio(this.createUpdatedPortfolioObject()))
+    );
   };
 
   updateRatesEvery10Sec = () => {
@@ -358,23 +378,82 @@ class App extends Component {
       Math.abs(newPotentialWalletValue) - Math.abs(walletValue)
     ).toFixed(2);
 
-    this.setState({
-      walletValueDifference: difference
-    });
+    this.setState(
+      {
+        walletValueDifference: difference
+      },
+      () => store.dispatch(updatePortfolio(this.createUpdatedPortfolioObject()))
+    );
   };
 
-  componentWillMount() {
-    if (this.props.auth.isAuthenticated) {
-      this.setState({
-        currencyArray: this.props.auth.user.portfolio.currencyArray
-      });
+  componentWillReceiveProps(nextProps) {
+    const portfolio = nextProps.auth.user.portfolio;
+    if (!nextProps.auth.isAuthenticated) {
+      this.setState(
+        {
+          currencyArray: initialCoinList,
+          walletValueDifference: "0.00",
+          walletValue: 0
+        },
+        () => this.fetchRates()
+      );
+    } else if (
+      portfolio.currencyArray.length !== this.state.currencyArray.length &&
+      !nextProps.auth.loading
+    ) {
+      this.setState(
+        {
+          currencyArray: portfolio.currencyArray,
+          myCoins: portfolio.myCoins,
+          walletDifference: portfolio.walletDifference,
+          walletValue: portfolio.walletValue
+        },
+        () => this.fetchRates()
+      );
     }
   }
 
   componentDidMount() {
-    this.fetchRates();
+    if (this.props.auth.isAuthenticated) {
+      const portfolio = this.props.auth.user.portfolio;
+      this.setState(
+        {
+          currencyArray: portfolio.currencyArray,
+          myCoins: portfolio.myCoins,
+          walletDifference: portfolio.walletDifference,
+          walletValue: portfolio.walletValue
+        },
+        () => this.fetchRates()
+      );
+    } else {
+      this.setState(
+        {
+          currencyArray: initialCoinList,
+          walletValueDifference: "0.00",
+          walletValue: 0
+        },
+        () => this.fetchRates()
+      );
+    }
     this.getAllCoinsAndAvatars();
   }
+
+  createUpdatedPortfolioObject = () => {
+    const {
+      currencyArray,
+      myCoins,
+      walletDifference,
+      walletValue
+    } = this.state;
+
+    const updatedPortfolio = {
+      currencyArray,
+      myCoins,
+      walletDifference,
+      walletValue
+    };
+    return updatedPortfolio;
+  };
 
   render() {
     const {
@@ -384,7 +463,6 @@ class App extends Component {
       walletValue,
       walletValueDifference
     } = this.state;
-    console.log(this.props.auth);
     return (
       <div className="App">
         <Navbar />

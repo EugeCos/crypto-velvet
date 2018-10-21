@@ -12,7 +12,6 @@ import {
   getCurrentProfile,
   createProfile
 } from "../../../actions/profileActions";
-import { updateUserName } from "../../../actions/authActions";
 
 // -----------COMPONENTS-----------
 import ButtonAction from "../../Common/ButtonAction";
@@ -118,10 +117,8 @@ class EditProfile extends Component {
       thingIWillNeverDoAgain
     };
 
-    const newName = { name };
-
-    this.props.updateUserName(newName);
-    this.props.createProfile(newProfile, this.props.history);
+    this.props.createProfile(newProfile);
+    this.props.history.push("/profile");
   };
 
   render() {
@@ -145,14 +142,6 @@ class EditProfile extends Component {
         <div className="create-profile-container">
           <Fragment>
             <h3>Edit profile</h3>
-            <TextFieldGroup
-              name={"name"}
-              value={name}
-              handleChange={this.handleChange}
-              type={"text"}
-              info={"Your name"}
-              customWidth={customWidth}
-            />
             <TextFieldGroup
               name={"website"}
               placeholder={"www.mysite.com"}
@@ -256,5 +245,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getCurrentProfile, createProfile, updateUserName }
+  { getCurrentProfile, createProfile }
 )(withRouter(EditProfile));

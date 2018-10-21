@@ -114,17 +114,20 @@ router.post("/login", (req, res) => {
   });
 });
 
-// @route      POST api/profile/edit
-// @desc       Update user's name
-// @access     Private
+// @route     POST api/users/update-portfolio
+// @desc      Update user's portfolio
+// @access    Private
 router.post(
-  "/edit",
+  "/update-portfolio",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    // Get profile fields
-    const name = req.body.name;
+    // Get updated portfolio data
+    const updatedPortfolio = req.body;
     const id = req.user.id;
-    User.findByIdAndUpdate(id, { name }).then(user => res.json(user));
+
+    User.findByIdAndUpdate(id, { portfolio: updatedPortfolio })
+      .then(user => res.json(user))
+      .catch(err => console.log(err));
   }
 );
 

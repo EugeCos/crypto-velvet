@@ -4,7 +4,7 @@ import {
   GET_ERRORS,
   SET_CURRENT_USER,
   SET_TEMPORARY_USERNAME_UPON_SUCCESSFUL_REGISTRATION,
-  UPDATE_USERNAME
+  UPDATE_PORTFOLIO
 } from "./types";
 import setAuthToken from "../utils/setAuthToken";
 
@@ -77,19 +77,11 @@ export const logoutUser = history => dispatch => {
   history.push("/login");
 };
 
-export const updateUserName = name => dispatch => {
-  axios
-    .post("/api/users/edit", name)
-    .then(res =>
-      dispatch({
-        type: UPDATE_USERNAME,
-        payload: res.data.name
-      })
-    )
-    .catch(err =>
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      })
-    );
+export const updatePortfolio = portfolioData => dispatch => {
+  axios.post("/api/users/update-portfolio", portfolioData).then(res =>
+    dispatch({
+      type: UPDATE_PORTFOLIO,
+      payload: res.data.portfolio
+    })
+  );
 };

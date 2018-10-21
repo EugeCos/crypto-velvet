@@ -20,7 +20,7 @@ const UserSchema = new Schema({
   },
   portfolio: {
     currencyArray: [{ type: String }],
-    walletValue: { type: Number },
+    walletValue: { type: String },
     walletDifference: { type: String },
     myCoins: [
       {
