@@ -43,7 +43,7 @@ for coin full names and avatars
 - MongoDB and Mongoose - data storage and serving
 - Express - API serving
 - Concurrently - run client and server simultaneously
-- Passport - validtaion
+- Passport - auth validation
 - Bcrypt - password encryption
 - JWT - data transfer
 - Validator - data validation
@@ -52,7 +52,7 @@ for coin full names and avatars
 
 ## Timeline
 
-August 9 to August 12, 2018 - initialized the project
+August 9 to August 12, 2018 - initialized the project<br />
 October 8 to October 21, 2018 - project development
 
 ## Contributors
