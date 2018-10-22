@@ -63,7 +63,7 @@ export const setCurrentUser = decoded => {
 };
 
 // Log user out
-export const logoutUser = history => dispatch => {
+export const logoutUser = () => dispatch => {
   // Remove token from local storage
   localStorage.removeItem("jwtToken");
 
@@ -72,9 +72,6 @@ export const logoutUser = history => dispatch => {
 
   // Set current user to {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
-
-  // Redirect to Login page
-  history.push("/login");
 };
 
 export const updatePortfolio = portfolioData => dispatch => {

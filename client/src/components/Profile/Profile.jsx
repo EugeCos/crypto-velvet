@@ -59,7 +59,11 @@ class Profile extends Component {
                 {profile.website ? (
                   <div className="website-wrapper">
                     <i className="fa fa-globe" />
-                    <p onClick={() => window.open(profile.website, "_blank")}>
+                    <p
+                      onClick={() =>
+                        window.open(`https://${profile.website}`, "_blank")
+                      }
+                    >
                       {profile.website}
                     </p>
                   </div>
@@ -82,10 +86,6 @@ class Profile extends Component {
                         additionalStyle={"btn-dashboard"}
                       />
                     </Link>
-                    <ButtonAction
-                      name="wallet"
-                      additionalStyle={"btn-wallet"}
-                    />
                     <p
                       onClick={this.handleDelete}
                       className="delete-account-link"

@@ -53,19 +53,30 @@ router.post(
     // Id, email and avatar are coming from the token
     profileFields.user = req.user.id;
 
-    if (req.body.website) profileFields.website = req.body.website;
-    if (req.body.location) profileFields.location = req.body.location;
+    if (req.body.website || req.body.website === "")
+      profileFields.website = req.body.website;
+    if (req.body.location || req.body.location === "")
+      profileFields.location = req.body.location;
     if (req.body.mostEmbarassingSong)
       profileFields.mostEmbarassingSong = req.body.mostEmbarassingSong;
-    if (req.body.afterWorkYouCanFindMeAt)
+    if (
+      req.body.afterWorkYouCanFindMeAt ||
+      req.body.afterWorkYouCanFindMeAt === ""
+    )
       profileFields.afterWorkYouCanFindMeAt = req.body.afterWorkYouCanFindMeAt;
-    if (req.body.whatWouldIDoWithMillion)
+    if (
+      req.body.whatWouldIDoWithMillion ||
+      req.body.whatWouldIDoWithMillion === ""
+    )
       profileFields.whatWouldIDoWithMillion = req.body.whatWouldIDoWithMillion;
-    if (req.body.iWontShutUpAbout)
+    if (req.body.iWontShutUpAbout || req.body.iWontShutUpAbout === "")
       profileFields.iWontShutUpAbout = req.body.iWontShutUpAbout;
-    if (req.body.myMostIrrationalFear)
+    if (req.body.myMostIrrationalFear || req.body.myMostIrrationalFear === "")
       profileFields.myMostIrrationalFear = req.body.myMostIrrationalFear;
-    if (req.body.thingIWillNeverDoAgain)
+    if (
+      req.body.thingIWillNeverDoAgain ||
+      req.body.thingIWillNeverDoAgain === ""
+    )
       profileFields.thingIWillNeverDoAgain = req.body.thingIWillNeverDoAgain;
 
     Profile.findOne({ user: req.user.id }).then(profile => {
@@ -81,7 +92,7 @@ router.post(
         new Profile(profileFields)
           .save()
           .then(profile => res.json(profile))
-          .catch(err => console.log(err));
+          .catch(err => res.status(404).json(err));
       }
     });
   }

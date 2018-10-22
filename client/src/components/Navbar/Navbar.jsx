@@ -17,10 +17,6 @@ import IconButton from "material-ui/IconButton";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 
 class Navbar extends Component {
-  constructor() {
-    super();
-    this.state = { toggleMenuIcon: false };
-  }
   componentWillMount() {
     this.props.getScreenWidth(window.innerWidth);
   }
@@ -31,17 +27,10 @@ class Navbar extends Component {
     this.props.clearCurrentProfile();
   };
 
-  toggleMenuIconFunction = () => {
-    this.setState({
-      toggleMenuIcon: !this.state.toggleMenuIcon
-    });
-  };
-
   render() {
     const { isAuthenticated, user } = this.props.auth;
-    const { toggleMenuIcon } = this.state;
 
-    const guestLinks = (
+    const guestLinks = this.props.auth.tempUserName ? null : (
       <Fragment>
         <Link to="/login" className="auth-link login">
           Login

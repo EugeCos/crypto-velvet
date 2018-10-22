@@ -2,8 +2,7 @@ import {
   SET_CURRENT_USER,
   SET_TEMPORARY_USERNAME_UPON_SUCCESSFUL_REGISTRATION,
   UPDATE_USERNAME,
-  UPDATE_PORTFOLIO,
-  PORTFOLIO_LOADING
+  UPDATE_PORTFOLIO
 } from "../actions/types";
 import isEmpty from "../validation/is-empty";
 
