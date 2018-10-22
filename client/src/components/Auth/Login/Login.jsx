@@ -60,7 +60,8 @@ class Login extends Component {
   render() {
     const { email, password, errors } = this.state;
     const { screenWidth } = this.props;
-    const customWidth = screenWidth.screenWidth / 5.5;
+    const customWidth =
+      screenWidth.screenWidth / (screenWidth.screenWidth > 1024 ? 5.5 : 2.2);
     return (
       <div className="custom-container">
         <img src="/img/logo.png" alt="" className="logo" />

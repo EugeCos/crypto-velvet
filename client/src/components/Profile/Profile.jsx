@@ -67,26 +67,38 @@ class Profile extends Component {
                   ""
                 )}
 
-                <Link to="/edit-profile">
-                  <ButtonAction
-                    name="edit profile"
-                    additionalStyle={"btn-edit-profile"}
-                  />
-                </Link>
-                <Link to="/">
-                  <ButtonAction
-                    name="dashboard"
-                    additionalStyle={"btn-dashboard"}
-                  />
-                </Link>
-                <ButtonAction name="wallet" additionalStyle={"btn-wallet"} />
-                <p onClick={this.handleDelete} className="delete-account-link">
-                  Delete Account
-                </p>
+                {screenWidth > 1024 ? (
+                  <Fragment>
+                    {" "}
+                    <Link to="/edit-profile">
+                      <ButtonAction
+                        name="edit profile"
+                        additionalStyle={"btn-edit-profile"}
+                      />
+                    </Link>
+                    <Link to="/">
+                      <ButtonAction
+                        name="dashboard"
+                        additionalStyle={"btn-dashboard"}
+                      />
+                    </Link>
+                    <ButtonAction
+                      name="wallet"
+                      additionalStyle={"btn-wallet"}
+                    />
+                    <p
+                      onClick={this.handleDelete}
+                      className="delete-account-link"
+                    >
+                      Delete Account
+                    </p>
+                  </Fragment>
+                ) : null}
               </div>
 
               {/* -----------ANSWERS TO PROFILE QUESTIONS----------- */}
               <div className="right-side-wrapper">
+                <hr className="hr-small-screen" />
                 <div className="questions-container">
                   {profile.mostEmbarassingSong ? (
                     <div className="question-block">
@@ -190,6 +202,33 @@ class Profile extends Component {
                     ""
                   )}
                 </div>
+                {screenWidth < 1024 ? (
+                  <Fragment>
+                    {" "}
+                    <Link to="/edit-profile">
+                      <ButtonAction
+                        name="edit profile"
+                        additionalStyle={"btn-edit-profile"}
+                      />
+                    </Link>
+                    <Link to="/">
+                      <ButtonAction
+                        name="dashboard"
+                        additionalStyle={"btn-dashboard"}
+                      />
+                    </Link>
+                    <ButtonAction
+                      name="wallet"
+                      additionalStyle={"btn-wallet"}
+                    />
+                    <p
+                      onClick={this.handleDelete}
+                      className="delete-account-link"
+                    >
+                      Delete Account
+                    </p>
+                  </Fragment>
+                ) : null}
               </div>
             </div>
           </Fragment>

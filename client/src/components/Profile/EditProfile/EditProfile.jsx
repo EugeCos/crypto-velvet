@@ -80,8 +80,7 @@ class EditProfile extends Component {
         whatWouldIDoWithMillion: profile.whatWouldIDoWithMillion,
         iWontShutUpAbout: profile.iWontShutUpAbout,
         myMostIrrationalFear: profile.myMostIrrationalFear,
-        thingIWillNeverDoAgain: profile.thingIWillNeverDoAgain,
-        name: profile.user.name
+        thingIWillNeverDoAgain: profile.thingIWillNeverDoAgain
       });
     }
   }
@@ -95,7 +94,6 @@ class EditProfile extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const {
-      name,
       website,
       location,
       mostEmbarassingSong,
@@ -125,7 +123,6 @@ class EditProfile extends Component {
     const { screenWidth } = this.props.screenWidth;
     const { errors } = this.state;
     const {
-      name,
       website,
       location,
       mostEmbarassingSong,
@@ -233,8 +230,7 @@ EditProfile.propTypes = {
   screenWidth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
-  createProfile: PropTypes.func.isRequired,
-  updateUserName: PropTypes.func.isRequired
+  createProfile: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

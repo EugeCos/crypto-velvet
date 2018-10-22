@@ -398,8 +398,7 @@ class App extends Component {
         () => this.fetchRates()
       );
     } else if (
-      portfolio.currencyArray.length !== this.state.currencyArray.length &&
-      !nextProps.auth.loading
+      portfolio.currencyArray.length !== this.state.currencyArray.length
     ) {
       this.setState(
         {

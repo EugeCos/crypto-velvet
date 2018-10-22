@@ -63,7 +63,8 @@ class Signup extends Component {
   render() {
     const { name, email, password, confirmPassword, errors } = this.state;
     const { screenWidth } = this.props;
-    const customWidth = screenWidth.screenWidth / 5.5;
+    const customWidth =
+      screenWidth.screenWidth / (screenWidth.screenWidth > 1024 ? 5.5 : 2.5);
 
     return (
       <div className="custom-container">

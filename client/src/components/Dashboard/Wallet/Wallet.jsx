@@ -11,6 +11,7 @@ const red = { color: "#c0392b", paddingTop: "10px" },
 class Wallet extends Component {
   render() {
     const { walletValue, walletValueDifference } = this.props;
+    const { screenWidth } = this.props.screenWidth;
     let fontStyle,
       sign = "";
 
@@ -31,7 +32,7 @@ class Wallet extends Component {
 
     return (
       <div className="wallet">
-        {" "}
+        {screenWidth > 480 ? "" : <hr className="hr-small-screen" />}
         <h1>
           {walletValue.toLocaleString("en", {
             maximumFractionDigits: 2
@@ -46,6 +47,6 @@ class Wallet extends Component {
   }
 }
 
-const mapStateToProps = state => ({ coins: state.coins });
+const mapStateToProps = state => ({ screenWidth: state.screenWidth });
 
 export default connect(mapStateToProps)(Wallet);
