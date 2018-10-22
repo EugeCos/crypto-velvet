@@ -1,10 +1,10 @@
 ## Synopsis
 
-A serverless web-app that allows users to look up cryptocurrencies and perform basic virtual trade manipulations (buy and sell coins).
+A full stack web-app that allows users to look up cryptocurrencies and perform basic virtual trade manipulations (buy and sell coins).
 
 ## Live Demo
 
-Link to App: [Velvet Crypto](http://velvet-crypto.herokuapp.com)
+Link to App: [Velvet Crypto](http://crypto-velvet.herokuapp.com)
 
 _Please wait for up to 15 seconds as the free Heroku server fires up for the app._
 
@@ -12,11 +12,11 @@ _Please wait for up to 15 seconds as the free Heroku server fires up for the app
 
 $ git clone https://github.com/EugeCos/crypto-tracker.git <br />
 $ cd PROJECT <br />
-$ npm install
+$ npm client-install
 
-## Start & watch
+## Start server and client & watch
 
-$ npm start
+$ npm run dev
 
 ## Simple build for production
 
@@ -40,12 +40,20 @@ for coin full names and avatars
 - Axios - API calls
 - Material UI - front-end framework
 - Font Awesome - fonts
+- MongoDB and Mongoose - data storage and serving
+- Express - API serving
+- Concurrently - run client and server simultaneously
+- Passport - validtaion
+- Bcrypt - password encryption
+- JWT - data transfer
+- Validator - data validation
 
 ---
 
 ## Timeline
 
-August 9 - August 16, 2018
+August 9 to August 12, 2018 - initialized the project
+October 8 to October 21, 2018 - project development
 
 ## Contributors
 
