@@ -82,10 +82,6 @@ class Navbar extends Component {
             onClick={() => this.props.history.push("/")}
           />
           <MenuItem
-            primaryText="My Wallet"
-            onClick={() => this.props.history.push("/wallet")}
-          />
-          <MenuItem
             primaryText="Profile"
             onClick={() => this.props.history.push("/profile")}
           />
