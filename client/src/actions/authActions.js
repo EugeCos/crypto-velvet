@@ -74,11 +74,13 @@ export const logoutUser = () => dispatch => {
   dispatch(setCurrentUser({}));
 };
 
-export const updatePortfolio = portfolioData => dispatch => {
-  axios.post("/api/users/update-portfolio", portfolioData).then(res =>
-    dispatch({
-      type: UPDATE_PORTFOLIO,
-      payload: res.data.portfolio
-    })
-  );
+export const updatePortfolio = (authStatus, portfolioData) => dispatch => {
+  if (authStatus) {
+    axios.post("/api/users/update-portfolio", portfolioData).then(res =>
+      dispatch({
+        type: UPDATE_PORTFOLIO,
+        payload: res.data.portfolio
+      })
+    );
+  }
 };
