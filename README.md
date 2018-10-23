@@ -27,7 +27,7 @@ $ npm run build
 https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,LTCtsyms=USD <br />
 for coin rates
 
-https://cors-anywhere.herokuapp.com/https://www.cryptocompare.com/api/data/coinlist/ <br />
+https://min-api.cryptocompare.com/data/all/coinlist <br />
 for coin full names and avatars
 
 ---

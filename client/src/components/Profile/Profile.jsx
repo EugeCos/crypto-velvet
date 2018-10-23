@@ -73,7 +73,6 @@ class Profile extends Component {
 
                 {screenWidth > 1024 ? (
                   <Fragment>
-                    {" "}
                     <Link to="/edit-profile">
                       <ButtonAction
                         name="edit profile"
@@ -217,10 +216,6 @@ class Profile extends Component {
                         additionalStyle={"btn-dashboard"}
                       />
                     </Link>
-                    <ButtonAction
-                      name="wallet"
-                      additionalStyle={"btn-wallet"}
-                    />
                     <p
                       onClick={this.handleDelete}
                       className="delete-account-link"

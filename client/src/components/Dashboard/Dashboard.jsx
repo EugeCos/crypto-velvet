@@ -11,6 +11,7 @@ import { limitDecimals } from "../../utils/utils";
 import { connect } from "react-redux";
 import { store } from "../../store";
 import { updatePortfolio } from "../../actions/authActions";
+import { getAllCoinsWithAvatars } from "../../actions/tradeActions";
 
 // --------COMPONENTS---------
 import AddCoin from "./AddCoin/AddCoin";
@@ -42,7 +43,7 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    const { getTimeoutIntervalIndex } = this.props;
+    const { getTimeoutIntervalIndex, getAllCoinsWithAvatars } = this.props;
     getTimeoutIntervalIndex(this.state.intervalIndex);
 
     if (this.props.auth.isAuthenticated) {
@@ -66,11 +67,14 @@ class Dashboard extends Component {
         () => this.fetchRates()
       );
     }
-    this.getAllCoinsAndAvatars();
+    // this.getAllCoinsAndAvatars();
+    getAllCoinsWithAvatars();
   }
 
   componentWillReceiveProps(nextProps) {
     const portfolio = nextProps.auth.user.portfolio;
+
+    // If user is logged out, return initial conlist [Bitcoin, Litecoin, Ethereum]
     if (!nextProps.auth.isAuthenticated) {
       this.setState(
         {
@@ -80,7 +84,10 @@ class Dashboard extends Component {
         },
         () => this.fetchRates()
       );
-    } else if (
+    }
+
+    // If user is logged in update component state with backend data
+    else if (
       portfolio.currencyArray.length !== this.state.currencyArray.length
     ) {
       this.setState(
@@ -92,6 +99,12 @@ class Dashboard extends Component {
         },
         () => this.fetchRates()
       );
+    }
+
+    // Once AllCoins return from Cryptocompare API, display them
+    if (nextProps.trade.allCoins.length > 0) {
+      this.setState({ allCoins: nextProps.trade.allCoins });
+      this.displayAvatars();
     }
   }
 
@@ -142,42 +155,11 @@ class Dashboard extends Component {
     );
   };
 
-  getAllCoinsAndAvatars = () => {
-    let coinListUrl = "https://min-api.cryptocompare.com/data/all/coinlist",
-      // "https://cors-anywhere.herokuapp.com/https://min-api.cryptocompare.com/data/all/coinlist",
-      allCoins = [];
-
-    api
-      .getAllCoins(coinListUrl)
-      .then(res => {
-        return res.json();
-      })
-      .then(myJson => {
-        for (let cur in myJson.Data) {
-          allCoins.push({
-            name: cur,
-            coinName: myJson.Data[cur].CoinName,
-            avatar: `https://www.cryptocompare.com/${myJson.Data[cur].ImageUrl}`
-          });
-        }
-      })
-      .then(() =>
-        this.setState(
-          {
-            allCoins
-          },
-          () => this.displayAvatars()
-        )
-      )
-      .catch(err => console.log(err));
-  };
-
   displayAvatars = () => {
     const { myCoins, allCoins, currencyArray } = this.state;
     const { auth } = this.props;
     const authStatus = auth.isAuthenticated;
 
-    console.log(auth);
     let rates;
     if (myCoins) {
       rates = Array.from(myCoins);
@@ -346,6 +328,7 @@ class Dashboard extends Component {
 
     let coinArrayCopy = JSON.parse(JSON.stringify(myCoins));
     let walletValue = 0;
+
     coinArrayCopy.map(coin => {
       return (walletValue += Number(coin.totalValue));
     });
@@ -447,14 +430,16 @@ class Dashboard extends Component {
 
 Dashboard.propTypes = {
   auth: PropTypes.object.isRequired,
+  trade: PropTypes.object.isRequired,
   updatePortfolio: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  trade: state.trade
 });
 
 export default connect(
   mapStateToProps,
-  { updatePortfolio }
+  { updatePortfolio, getAllCoinsWithAvatars }
 )(Dashboard);
