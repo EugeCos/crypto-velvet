@@ -9,6 +9,7 @@ import ContentAdd from "material-ui/svg-icons/content/add";
 
 // ---------REDUX----------
 import { connect } from "react-redux";
+import { addCoin } from "../../../actions/tradeActions";
 
 class AddCoin extends Component {
   constructor() {
@@ -120,8 +121,7 @@ class AddCoin extends Component {
   };
 
   handleClick = () => {
-    const { addCoin } = this.props;
-    addCoin(this.state.selectedCoin);
+    this.props.addCoin(this.state.selectedCoin);
     this.setState({
       searchValue: "",
       searchList: [],
@@ -239,7 +239,11 @@ AddCoin.propType = {
 };
 
 const mapStateToProps = state => ({
-  screenWidth: state.screenWidth.screenWidth
+  screenWidth: state.screenWidth.screenWidth,
+  allCoins: state.trade.allCoins
 });
 
-export default connect(mapStateToProps)(AddCoin);
+export default connect(
+  mapStateToProps,
+  { addCoin }
+)(AddCoin);

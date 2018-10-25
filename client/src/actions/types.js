@@ -15,6 +15,10 @@ export const CLEAR_CURRENT_PROFILE = "CLEAR_CURRENT_PROFILE";
 
 // -----------Trade Actions------------
 export const GET_ALL_COINS_WITH_AVATARS = "GET_ALL_COINS_WITH_AVATARS";
+export const UPDATE_MY_COINS_LIST = "UPDATE_MY_COINS_LIST";
+export const UPDATE_CURRENCY_ARRAY = "UPDATE_CURRENCY_ARRAY";
+export const UPDATE_WALLET_VALUE = "UPDATE_WALLET_VALUE";
+export const UPDATE_WALLET_VALUE_DIFFERENCE = "UPDATE_WALLET_VALUE_DIFFERENCE";
 
 // ----------Errors Handling-----------
 export const GET_ERRORS = "GET_ERRORS";

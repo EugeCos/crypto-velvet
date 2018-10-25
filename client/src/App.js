@@ -25,6 +25,7 @@ import "./css/global.less";
 import { store } from "./store";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { clearCurrentProfile } from "./actions/profileActions";
+import { getAllCoinsWithAvatars } from "./actions/tradeActions";
 
 // ----------UTILITY FUNCITONS-----------
 import setAuthToken from "./utils/setAuthToken";
@@ -61,6 +62,10 @@ class App extends Component {
     this.state = {
       intervalIndex: 0 // Interval index is need needed to kill updateRatesEvery10Sec()
     };
+  }
+
+  componentDidMount() {
+    store.dispatch(getAllCoinsWithAvatars());
   }
 
   getTimeoutIntervalIndex = intervalIndex => {

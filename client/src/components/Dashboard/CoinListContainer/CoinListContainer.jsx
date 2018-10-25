@@ -1,28 +1,18 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import Coin from "./Coin/Coin";
 import "./CoinListContainer.less";
 
-export default class CoinListContainer extends Component {
+// -------REDUX--------
+import { connect } from "react-redux";
+
+class CoinListContainer extends Component {
   render() {
-    const {
-      myCoins,
-      deleteCoin,
-      tradeCoins,
-      currencyArray,
-      dialogStyle,
-      titleStyle
-    } = this.props;
+    const { myCoins, dialogStyle, titleStyle } = this.props;
     return (
       <div className="coinlist-container">
         <div className="coinlist-wrapper">
-          <Coin
-            myCoins={myCoins}
-            deleteCoin={deleteCoin}
-            tradeCoins={tradeCoins}
-            currencyArray={currencyArray}
-            dialogStyle={dialogStyle}
-            titleStyle={titleStyle}
-          />
+          <Coin dialogStyle={dialogStyle} titleStyle={titleStyle} />
         </div>
         {myCoins.length ? (
           <span
@@ -42,3 +32,14 @@ export default class CoinListContainer extends Component {
     );
   }
 }
+
+CoinListContainer.propTypes = {
+  myCoins: PropTypes.object.isRequired,
+  currencyArray: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  myCoins: state.trade
+});
+
+export default connect(mapStateToProps)(CoinListContainer);

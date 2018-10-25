@@ -11,7 +11,11 @@ import { limitDecimals } from "../../utils/utils";
 import { connect } from "react-redux";
 import { store } from "../../store";
 import { updatePortfolio } from "../../actions/authActions";
-import { getAllCoinsWithAvatars } from "../../actions/tradeActions";
+import {
+  getAllCoinsWithAvatars,
+  fetchRates,
+  updateRatesEvery10Sec
+} from "../../actions/tradeActions";
 
 // --------COMPONENTS---------
 import AddCoin from "./AddCoin/AddCoin";
@@ -26,7 +30,7 @@ class Dashboard extends Component {
     super();
     this.state = {
       intervalIndex: 0, // Interval index is needed to kill updateRatesEvery10Sec()
-      currencyArray: initialCoinList,
+      currencyArray: [],
       allCoins: [],
       myCoins: [],
       walletValue: "0.00",
@@ -35,7 +39,10 @@ class Dashboard extends Component {
   }
 
   componentWillMount() {
-    let intervalIndex = setInterval(() => this.updateRatesEvery10Sec(), 8000);
+    let intervalIndex = setInterval(
+      () => this.props.updateRatesEvery10Sec(),
+      8000
+    );
 
     this.setState({
       intervalIndex
@@ -43,149 +50,81 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    const { getTimeoutIntervalIndex, getAllCoinsWithAvatars } = this.props;
+    const {
+      getTimeoutIntervalIndex,
+      getAllCoinsWithAvatars,
+      fetchRates
+    } = this.props;
     getTimeoutIntervalIndex(this.state.intervalIndex);
+    const { currencyArray } = this.props.trade;
 
-    if (this.props.auth.isAuthenticated) {
-      const portfolio = this.props.auth.user.portfolio;
-      this.setState(
-        {
-          currencyArray: portfolio.currencyArray,
-          myCoins: portfolio.myCoins,
-          walletDifference: portfolio.walletDifference,
-          walletValue: portfolio.walletValue
-        },
-        () => this.fetchRates()
-      );
-    } else {
-      this.setState(
-        {
-          currencyArray: initialCoinList,
-          walletValueDifference: "0.00",
-          walletValue: 0
-        },
-        () => this.fetchRates()
-      );
-    }
-    // this.getAllCoinsAndAvatars();
-    getAllCoinsWithAvatars();
+    // if (this.props.auth.isAuthenticated) {
+    //   const portfolio = this.props.auth.user.portfolio;
+    //   this.setState(
+    //     {
+    //       currencyArray: portfolio.currencyArray,
+    //       myCoins: portfolio.myCoins,
+    //       walletDifference: portfolio.walletDifference,
+    //       walletValue: portfolio.walletValue
+    //     },
+    //     () => this.fetchRates()
+    //   );
+    // } else {
+    //   this.setState(
+    //     {
+    //       currencyArray: initialCoinList,
+    //       walletValueDifference: "0.00",
+    //       walletValue: 0
+    //     },
+    //     () => this.fetchRates()
+    //   );
+    // }
+    fetchRates(currencyArray);
   }
 
   componentWillReceiveProps(nextProps) {
     const portfolio = nextProps.auth.user.portfolio;
+    const { myCoins, allCoins, currencyArray } = this.props.trade;
+    const { isAuthenticated } = this.props.auth;
+    const { populateCoinObjectWithAvatar } = this.props;
 
     // If user is logged out, return initial conlist [Bitcoin, Litecoin, Ethereum]
-    if (!nextProps.auth.isAuthenticated) {
-      this.setState(
-        {
-          currencyArray: initialCoinList,
-          walletValueDifference: "0.00",
-          walletValue: 0
-        },
-        () => this.fetchRates()
-      );
-    }
+    // if (!nextProps.auth.isAuthenticated) {
+    //   this.setState(
+    //     {
+    //       currencyArray: initialCoinList,
+    //       walletValueDifference: "0.00",
+    //       walletValue: 0
+    //     },
+    //     () => this.fetchRates()
+    //   );
+    // }
 
     // If user is logged in update component state with backend data
-    else if (
-      portfolio.currencyArray.length !== this.state.currencyArray.length
-    ) {
-      this.setState(
-        {
-          currencyArray: portfolio.currencyArray,
-          myCoins: portfolio.myCoins,
-          walletDifference: portfolio.walletDifference,
-          walletValue: portfolio.walletValue
-        },
-        () => this.fetchRates()
-      );
-    }
+    // else if (
+    //   portfolio.currencyArray.length !== this.state.currencyArray.length
+    // ) {
+    //   this.setState(
+    //     {
+    //       currencyArray: portfolio.currencyArray,
+    //       myCoins: portfolio.myCoins,
+    //       walletDifference: portfolio.walletDifference,
+    //       walletValue: portfolio.walletValue
+    //     },
+    //     () => this.fetchRates()
+    //   );
+    // }
 
     // Once AllCoins return from Cryptocompare API, display them
-    if (nextProps.trade.allCoins.length > 0) {
-      this.setState({ allCoins: nextProps.trade.allCoins });
-      this.displayAvatars();
-    }
+    // if (nextProps.trade.myCoins !== this.props.trade.myCoins) {
+    //   populateCoinObjectWithAvatar(
+    //     myCoins,
+    //     allCoins,
+    //     currencyArray,
+    //     isAuthenticated
+    //   );
+    // }
   }
-
-  fetchRates = () => {
-    const { currencyArray } = this.state;
-    let url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${currencyArray}&tsyms=USD`;
-
-    if (currencyArray.length) {
-      api
-        .getRates(url)
-        .then(res => {
-          return res.json();
-        })
-        .then(myJson => {
-          this.createExchangeRateObject(myJson);
-        })
-        .catch(error => console.log(error));
-    } else {
-      this.setState(
-        {
-          myCoins: []
-        },
-        () => this.displayAvatars()
-      );
-    }
-  };
-
-  createExchangeRateObject = rates => {
-    let coinArrayCopy = [];
-
-    for (let cur in rates.RAW) {
-      const coin = rates.RAW[cur].USD;
-      coinArrayCopy.push({
-        name: cur,
-        rateToUSD: limitDecimals(coin.PRICE),
-        percentChange24Hr: `${coin.CHANGEPCT24HOUR.toFixed(2)}%`,
-        high24Hr: limitDecimals(coin.HIGH24HOUR),
-        low24Hr: limitDecimals(coin.LOW24HOUR),
-        holding: 0,
-        totalValue: "0.00"
-      });
-    }
-    this.setState(
-      {
-        myCoins: coinArrayCopy
-      },
-      () => this.displayAvatars()
-    );
-  };
-
-  displayAvatars = () => {
-    const { myCoins, allCoins, currencyArray } = this.state;
-    const { auth } = this.props;
-    const authStatus = auth.isAuthenticated;
-
-    let rates;
-    if (myCoins) {
-      rates = Array.from(myCoins);
-    }
-
-    if (currencyArray.length) {
-      if (allCoins.length && myCoins.length) {
-        myCoins.map((currency, index) => {
-          let coinIndex = allCoins.findIndex(
-            coin => coin.name === currency.name
-          );
-          rates[index].avatar = allCoins[coinIndex].avatar;
-          rates[index].coinName = allCoins[coinIndex].coinName;
-          return this.setState(
-            {
-              myCoins: rates
-            },
-            () =>
-              store.dispatch(
-                updatePortfolio(authStatus, this.createUpdatedPortfolioObject())
-              )
-          );
-        });
-      }
-    }
-  };
 
   // Create a portfolio object to send it to Redux component state
   createUpdatedPortfolioObject = () => {
@@ -205,223 +144,12 @@ class Dashboard extends Component {
     return updatedPortfolio;
   };
 
-  addCoin = selectedCoin => {
-    let newArray = this.state.currencyArray.slice();
-    newArray.unshift(selectedCoin);
-    this.setState(
-      {
-        currencyArray: newArray
-      },
-      () => this.fetchDataForNewCoins(selectedCoin)
-    );
-  };
-
-  deleteCoin = (e, name) => {
-    e.stopPropagation();
-    const { myCoins, currencyArray } = this.state;
-
-    let newCurrencyArray = currencyArray.slice(),
-      newmyCoinsArray = myCoins.slice();
-
-    let coinIndex = newCurrencyArray.indexOf(name);
-    newCurrencyArray.splice(coinIndex, 1);
-    newmyCoinsArray.splice(coinIndex, 1);
-
-    this.setState(
-      {
-        currencyArray: newCurrencyArray,
-        myCoins: newmyCoinsArray
-      },
-      () => this.updateWallet()
-    );
-  };
-
-  fetchDataForNewCoins = coin => {
-    const { myCoins, allCoins } = this.state;
-    const { auth } = this.props;
-    const authStatus = auth.isAuthenticated;
-
-    let newCoin, coinArrayCopy, coinIndex;
-    coinArrayCopy = Array.from(myCoins);
-    coinIndex = allCoins.findIndex(coinFromList => coinFromList.name === coin);
-
-    let url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${coin}&tsyms=USD`;
-
-    let ifError = () => {
-      newCoin = {
-        name: coin,
-        rateToUSD: 0,
-        percentChange24Hr: "N/a",
-        high24Hr: "N/a",
-        low24Hr: "N/a",
-        holding: 0,
-        totalValue: "0.00",
-        avatar: allCoins[coinIndex].avatar,
-        coinName: allCoins[coinIndex].coinName
-      };
-      coinArrayCopy.unshift(newCoin);
-      this.setState({
-        myCoins: coinArrayCopy
-      });
-    };
-
-    api
-      .getRates(url)
-      .then(res => {
-        return res.json();
-      })
-      .then(myJson => {
-        // if (res.status === 200) {
-        let response = myJson.RAW[coin].USD;
-        if (myCoins.length) {
-          newCoin = {
-            name: coin,
-            rateToUSD: limitDecimals(response.PRICE),
-            percentChange24Hr: `${response.CHANGEPCT24HOUR.toFixed(2)}%`,
-            high24Hr: limitDecimals(response.HIGH24HOUR),
-            low24Hr: limitDecimals(response.LOW24HOUR),
-            holding: 0,
-            totalValue: "0.00",
-            avatar: allCoins[coinIndex].avatar,
-            coinName: allCoins[coinIndex].coinName
-          };
-          coinArrayCopy.unshift(newCoin);
-          this.setState(
-            {
-              myCoins: coinArrayCopy
-            },
-            () =>
-              store.dispatch(
-                updatePortfolio(authStatus, this.createUpdatedPortfolioObject())
-              )
-          );
-        } else {
-          this.fetchRates();
-        }
-        // }
-      })
-
-      .catch(error => ifError());
-  };
-
-  tradeCoins = (numberOfTradedCoins, tradeValue, selectedCoinName) => {
-    const { myCoins } = this.state;
-    let coinArrayCopy = JSON.parse(JSON.stringify(myCoins));
-    let coinIndex = myCoins.findIndex(coin => coin.name === selectedCoinName);
-    let newArray = coinArrayCopy[coinIndex];
-
-    newArray.holding = Number(newArray.holding) + numberOfTradedCoins;
-    newArray.totalValue = Number(newArray.totalValue) + tradeValue;
-
-    this.setState(
-      {
-        myCoins: coinArrayCopy
-      },
-      () => this.updateWallet()
-    );
-  };
-
-  updateWallet = () => {
-    const { myCoins } = this.state;
-    const { auth } = this.props;
-    const authStatus = auth.isAuthenticated;
-
-    let coinArrayCopy = JSON.parse(JSON.stringify(myCoins));
-    let walletValue = 0;
-
-    coinArrayCopy.map(coin => {
-      return (walletValue += Number(coin.totalValue));
-    });
-
-    this.setState(
-      {
-        walletValue
-      },
-      () =>
-        store.dispatch(
-          updatePortfolio(authStatus, this.createUpdatedPortfolioObject())
-        )
-    );
-  };
-
-  updateRatesEvery10Sec = () => {
-    console.log("Update rates ran");
-    const { myCoins, currencyArray } = this.state;
-    let arrayWithUpdatedRates = Array.from(myCoins);
-    let url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${currencyArray}&tsyms=USD`;
-
-    if (currencyArray.length) {
-      api
-        .getRates(url)
-        .then(res => {
-          return res.json();
-        })
-        .then(myJson => {
-          // if (res.status === 200) {
-          arrayWithUpdatedRates.forEach(
-            coin =>
-              (coin.rateToUSD = limitDecimals(myJson.RAW[coin.name].USD.PRICE))
-          );
-          // }
-        })
-
-        .catch(error => console.log(error));
-      this.setState(
-        {
-          myCoins: arrayWithUpdatedRates
-        },
-        () => this.checkWalletStatus()
-      );
-    }
-  };
-
-  checkWalletStatus = () => {
-    const { myCoins, walletValue } = this.state;
-    const { auth } = this.props;
-    const authStatus = auth.isAuthenticated;
-
-    let newPotentialWalletValue = 0;
-
-    myCoins.map(coin => {
-      return (newPotentialWalletValue += coin.rateToUSD * coin.holding);
-    });
-
-    let difference = (
-      Math.abs(newPotentialWalletValue) - Math.abs(walletValue)
-    ).toFixed(2);
-
-    this.setState(
-      {
-        walletValueDifference: difference
-      },
-      () =>
-        store.dispatch(
-          updatePortfolio(authStatus, this.createUpdatedPortfolioObject())
-        )
-    );
-  };
-
   render() {
-    const {
-      walletValue,
-      walletValueDifference,
-      myCoins,
-      currencyArray,
-      allCoins
-    } = this.state;
     return (
       <Fragment>
-        <Wallet
-          walletValue={walletValue}
-          walletValueDifference={walletValueDifference}
-        />
-        <CoinListContainer
-          myCoins={myCoins}
-          deleteCoin={this.deleteCoin}
-          tradeCoins={this.tradeCoins}
-          currencyArray={currencyArray}
-        />
-        <AddCoin allCoins={allCoins} addCoin={this.addCoin} />
+        <Wallet />
+        <CoinListContainer />
+        <AddCoin />
         <Footer />
       </Fragment>
     );
@@ -431,7 +159,9 @@ class Dashboard extends Component {
 Dashboard.propTypes = {
   auth: PropTypes.object.isRequired,
   trade: PropTypes.object.isRequired,
-  updatePortfolio: PropTypes.func.isRequired
+  updatePortfolio: PropTypes.func.isRequired,
+  fetchRates: PropTypes.func.isRequired,
+  updateRatesEvery10Sec: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -441,5 +171,10 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { updatePortfolio, getAllCoinsWithAvatars }
+  {
+    updatePortfolio,
+    getAllCoinsWithAvatars,
+    fetchRates,
+    updateRatesEvery10Sec
+  }
 )(Dashboard);

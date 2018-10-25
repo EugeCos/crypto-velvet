@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import PropTypes from "prop-types";
 import "./Coin.less";
 
 // ----------REACT-CSS-TRANSITION-GROUP-----------
@@ -13,6 +14,7 @@ import Spinner from "../../../Common/Spinner";
 
 // --------REDUX---------
 import { connect } from "react-redux";
+import { deleteCoin } from "../../../../actions/tradeActions";
 
 class Coin extends Component {
   constructor() {
@@ -34,6 +36,11 @@ class Coin extends Component {
     this.setState({ dialogOpen: false });
   };
 
+  handleDeleteClick = (e, name) => {
+    e.stopPropagation();
+    this.props.deleteCoin(name);
+  };
+
   render() {
     const { selectedCoin } = this.state;
     const {
@@ -41,7 +48,6 @@ class Coin extends Component {
       auth,
       myCoins,
       currencyArray,
-      deleteCoin,
       tradeCoins
     } = this.props;
     const transitionOptions = {
@@ -99,7 +105,10 @@ class Coin extends Component {
             </h3>
           </div>
 
-          <i className="fa fa-times" onClick={e => deleteCoin(e, coin.name)} />
+          <i
+            className="fa fa-times"
+            onClick={e => this.handleDeleteClick(e, coin.name)}
+          />
         </div>
       );
     });
@@ -134,7 +143,6 @@ class Coin extends Component {
           <CoinModal
             screenWidth={screenWidth}
             coin={selectedCoin}
-            tradeCoins={tradeCoins}
             handleClose={this.handleClose}
           />
         </Dialog>
@@ -143,9 +151,18 @@ class Coin extends Component {
   }
 }
 
+Coin.propTypes = {
+  screenWidth: PropTypes.number.isRequired,
+  auth: PropTypes.object.isRequired,
+  deleteCoin: PropTypes.func.isRequired
+};
+
 const mapStateToProps = state => ({
   screenWidth: state.screenWidth.screenWidth,
   auth: state.auth
 });
 
-export default connect(mapStateToProps)(Coin);
+export default connect(
+  mapStateToProps,
+  { deleteCoin }
+)(Coin);

@@ -10,7 +10,7 @@ const red = { color: "#c0392b", paddingTop: "10px" },
 
 class Wallet extends Component {
   render() {
-    const { walletValue, walletValueDifference } = this.props;
+    const { walletValue, walletValueDifference } = this.props.trade;
     const { screenWidth } = this.props.screenWidth;
     let fontStyle,
       sign = "";
@@ -47,6 +47,9 @@ class Wallet extends Component {
   }
 }
 
-const mapStateToProps = state => ({ screenWidth: state.screenWidth });
+const mapStateToProps = state => ({
+  screenWidth: state.screenWidth,
+  trade: state.trade
+});
 
 export default connect(mapStateToProps)(Wallet);

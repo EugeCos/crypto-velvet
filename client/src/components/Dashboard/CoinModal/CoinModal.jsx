@@ -1,10 +1,15 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import "./CoinModal.less";
+
+// -----------REDUX------------
+import { connect } from "react-redux";
+import { tradeCoins } from "../../../actions/tradeActions";
 
 const red = { color: "#c0392b" },
   green = { color: "#27ae60" };
 
-export default class CoinModal extends Component {
+class CoinModal extends Component {
   constructor() {
     super();
     this.state = {
@@ -27,7 +32,7 @@ export default class CoinModal extends Component {
 
   handleClick = tradeOption => {
     const { numberOfCoins, totalValue } = this.state;
-    const { tradeCoins, handleClose, coin } = this.props;
+    const { handleClose, coin } = this.props;
     const { name } = coin;
 
     let totalValueWithMathSign = totalValue,
@@ -42,7 +47,11 @@ export default class CoinModal extends Component {
         error: true
       });
     } else {
-      tradeCoins(numberOfCoinsWithMathSign, totalValueWithMathSign, name);
+      this.props.tradeCoins(
+        numberOfCoinsWithMathSign,
+        totalValueWithMathSign,
+        name
+      );
       handleClose();
     }
   };
@@ -167,3 +176,12 @@ export default class CoinModal extends Component {
     );
   }
 }
+
+CoinModal.propTypes = {
+  tradeCoins: PropTypes.func.isRequired
+};
+
+export default connect(
+  null,
+  { tradeCoins }
+)(CoinModal);
