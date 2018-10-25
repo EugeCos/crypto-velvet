@@ -61,8 +61,20 @@ export const fetchRates = currencyArray => dispatch => {
 // Create a new object with various coin data for each coin. Part of fetchRates() function
 export const createExchangeRateObject = rates => dispatch => {
   let newCoinsArray = [];
+  let myCoins = store.getState().trade.myCoins;
 
   for (let cur in rates.RAW) {
+    let existingHolding = 0,
+      existingTotalValue = "0.00";
+
+    // If there is a holding with totalValue, return that. Otherwise return 0.00
+    myCoins.map(coin => {
+      if (cur === coin.name) {
+        existingHolding = coin.holding;
+        existingTotalValue = coin.totalValue;
+      }
+    });
+
     const coin = rates.RAW[cur].USD;
     newCoinsArray.push({
       name: cur,
@@ -70,8 +82,8 @@ export const createExchangeRateObject = rates => dispatch => {
       percentChange24Hr: `${coin.CHANGEPCT24HOUR.toFixed(2)}%`,
       high24Hr: limitDecimals(coin.HIGH24HOUR),
       low24Hr: limitDecimals(coin.LOW24HOUR),
-      holding: 0,
-      totalValue: "0.00"
+      holding: existingHolding,
+      totalValue: existingTotalValue
     });
   }
   dispatch({

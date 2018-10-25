@@ -34,8 +34,7 @@ class CoinListContainer extends Component {
 }
 
 CoinListContainer.propTypes = {
-  myCoins: PropTypes.object.isRequired,
-  currencyArray: PropTypes.object.isRequired
+  myCoins: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

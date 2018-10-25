@@ -43,13 +43,8 @@ class Coin extends Component {
 
   render() {
     const { selectedCoin } = this.state;
-    const {
-      screenWidth,
-      auth,
-      myCoins,
-      currencyArray,
-      tradeCoins
-    } = this.props;
+    const { screenWidth, auth } = this.props;
+    const { myCoins, currencyArray } = this.props.trade;
     const transitionOptions = {
       transitionName: "fade",
       transitionEnterTimeout: 400,
@@ -159,7 +154,8 @@ Coin.propTypes = {
 
 const mapStateToProps = state => ({
   screenWidth: state.screenWidth.screenWidth,
-  auth: state.auth
+  auth: state.auth,
+  trade: state.trade
 });
 
 export default connect(

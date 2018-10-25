@@ -1,15 +1,8 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 
-// -----------FRONT-END API-------------
-import api from "../../api";
-
-// ----------UTILITY FUNCITONS-----------
-import { limitDecimals } from "../../utils/utils";
-
 // --------------REDUX--------------
 import { connect } from "react-redux";
-import { store } from "../../store";
 import { updatePortfolio } from "../../actions/authActions";
 import {
   getAllCoinsWithAvatars,
@@ -23,18 +16,11 @@ import CoinListContainer from "./CoinListContainer/CoinListContainer";
 import Wallet from "./Wallet/Wallet";
 import Footer from "../Footer/Footer";
 
-const initialCoinList = ["BTC", "ETH", "LTC"];
-
 class Dashboard extends Component {
   constructor() {
     super();
     this.state = {
-      intervalIndex: 0, // Interval index is needed to kill updateRatesEvery10Sec()
-      currencyArray: [],
-      allCoins: [],
-      myCoins: [],
-      walletValue: "0.00",
-      walletValueDifference: "0.00"
+      intervalIndex: 0 // Interval index is needed to kill updateRatesEvery10Sec()
     };
   }
 
@@ -50,11 +36,7 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    const {
-      getTimeoutIntervalIndex,
-      getAllCoinsWithAvatars,
-      fetchRates
-    } = this.props;
+    const { getTimeoutIntervalIndex, fetchRates } = this.props;
     getTimeoutIntervalIndex(this.state.intervalIndex);
     const { currencyArray } = this.props.trade;
 
