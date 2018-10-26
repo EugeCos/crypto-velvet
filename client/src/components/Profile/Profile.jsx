@@ -6,6 +6,7 @@ import "./Profile.less";
 // ---------REDUX---------
 import { connect } from "react-redux";
 import { getCurrentProfile, deleteAccount } from "../../actions/profileActions";
+import { createPortfolio } from "../../actions/tradeActions";
 
 // ---------COMPONENTS----------
 import CreateProfile from "./CreateProfile/CreateProfile";
@@ -17,6 +18,11 @@ import ButtonAction from "../Common/ButtonAction";
 class Profile extends Component {
   componentDidMount() {
     this.props.getCurrentProfile();
+
+    // If user logs in for the first time, create an empty portfolio and send the data to backend
+    if (!this.props.trade.user) {
+      this.props.createPortfolio();
+    }
   }
 
   handleDelete = e => {
@@ -246,18 +252,21 @@ class Profile extends Component {
 Profile.propTypes = {
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
+  trade: PropTypes.object.isRequired,
   screenWidth: PropTypes.object.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
-  deleteAccount: PropTypes.func.isRequired
+  deleteAccount: PropTypes.func.isRequired,
+  createPortfolio: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   auth: state.auth,
   profile: state.profile,
+  trade: state.trade,
   screenWidth: state.screenWidth
 });
 
 export default connect(
   mapStateToProps,
-  { getCurrentProfile, deleteAccount }
+  { getCurrentProfile, deleteAccount, createPortfolio }
 )(Profile);

@@ -7,6 +7,8 @@ import {
   UPDATE_PORTFOLIO
 } from "./types";
 import setAuthToken from "../utils/setAuthToken";
+import { store } from "../store";
+import { clearTradeObject } from "./tradeActions";
 
 // Register user
 export const registerUser = (userData, history) => dispatch => {
@@ -63,7 +65,7 @@ export const setCurrentUser = decoded => {
 };
 
 // Log user out
-export const logoutUser = () => dispatch => {
+export const logoutUser = history => dispatch => {
   // Remove token from local storage
   localStorage.removeItem("jwtToken");
 
@@ -72,6 +74,12 @@ export const logoutUser = () => dispatch => {
 
   // Set current user to {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
+
+  // Send user to Login page
+  history.push("/login");
+
+  // Clear Trade object
+  store.dispatch(clearTradeObject());
 };
 
 export const updatePortfolio = (authStatus, portfolioData) => dispatch => {

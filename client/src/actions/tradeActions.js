@@ -3,9 +3,13 @@ import {
   UPDATE_MY_COINS_LIST,
   UPDATE_CURRENCY_ARRAY,
   UPDATE_WALLET_VALUE,
-  UPDATE_WALLET_VALUE_DIFFERENCE
+  UPDATE_WALLET_VALUE_DIFFERENCE,
+  GET_PORTFOLIO,
+  PORTFOLIO_LOADING,
+  CLEAR_TRADE_OBJECT
 } from "./types";
 import api from "../api";
+import axios from "axios";
 import { store } from "../store";
 import { limitDecimals } from "../utils/utils";
 
@@ -303,4 +307,40 @@ export const updateRatesEvery10Sec = () => dispatch => {
     });
     dispatch(checkWalletStatus());
   }
+};
+
+// ---------------- AUTH related actions -----------------
+// Portfolio loading
+export const setPortfolioLoading = () => {
+  return {
+    type: PORTFOLIO_LOADING
+  };
+};
+
+// Create an empty portfolio object when user registers
+export const createPortfolio = () => dispatch => {
+  axios
+    .post("/api/trade/create-portfolio")
+    .then(res => dispatch(console.log(res)))
+    .catch(err => console.log(err));
+};
+
+// Get portfolio of logged in user
+export const getCurrentPortfolio = () => dispatch => {
+  dispatch(setPortfolioLoading());
+  axios
+    .get("/api/trade")
+    .then(res =>
+      dispatch({
+        type: GET_PORTFOLIO,
+        payload: res.data
+      })
+    )
+    .catch(err => console.log(err));
+};
+
+export const clearTradeObject = () => dispatch => {
+  dispatch({
+    type: CLEAR_TRADE_OBJECT
+  });
 };

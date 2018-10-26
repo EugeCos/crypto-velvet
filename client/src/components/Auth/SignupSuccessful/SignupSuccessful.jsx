@@ -10,13 +10,6 @@ import ButtonAction from "../../Common/ButtonAction";
 import { connect } from "react-redux";
 
 class SignupSuccessful extends Component {
-  constructor() {
-    super();
-    this.state = {
-      landedFromSignup: false
-    };
-  }
-
   render() {
     let name = [];
     if (this.props.auth.tempUserName) {

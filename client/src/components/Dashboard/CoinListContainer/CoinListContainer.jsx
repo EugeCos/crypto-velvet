@@ -6,15 +6,25 @@ import "./CoinListContainer.less";
 // -------REDUX--------
 import { connect } from "react-redux";
 
+// --------COMPONENTS---------
+import Spinner from "../../Common/Spinner";
+
 class CoinListContainer extends Component {
   render() {
-    const { myCoins, dialogStyle, titleStyle } = this.props;
+    const { dialogStyle, titleStyle } = this.props;
+    const { myCoins, loading } = this.props.trade;
     return (
       <div className="coinlist-container">
         <div className="coinlist-wrapper">
-          <Coin dialogStyle={dialogStyle} titleStyle={titleStyle} />
+          {loading ? (
+            <div className="coin-spinner-wrapper">
+              <Spinner />
+            </div>
+          ) : (
+            <Coin dialogStyle={dialogStyle} titleStyle={titleStyle} />
+          )}
         </div>
-        {myCoins.length ? (
+        {myCoins.length && !loading ? (
           <span
             style={{
               color: "#57606f",
@@ -34,11 +44,11 @@ class CoinListContainer extends Component {
 }
 
 CoinListContainer.propTypes = {
-  myCoins: PropTypes.object.isRequired
+  trade: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  myCoins: state.trade
+  trade: state.trade
 });
 
 export default connect(mapStateToProps)(CoinListContainer);

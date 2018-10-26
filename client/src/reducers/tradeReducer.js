@@ -3,7 +3,10 @@ import {
   UPDATE_MY_COINS_LIST,
   UPDATE_CURRENCY_ARRAY,
   UPDATE_WALLET_VALUE,
-  UPDATE_WALLET_VALUE_DIFFERENCE
+  UPDATE_WALLET_VALUE_DIFFERENCE,
+  GET_PORTFOLIO,
+  CLEAR_TRADE_OBJECT,
+  PORTFOLIO_LOADING
 } from "../actions/types";
 
 const initialState = {
@@ -41,6 +44,32 @@ export default function(state = initialState, action) {
       return {
         ...state,
         walletValueDifference: action.payload
+      };
+    case GET_PORTFOLIO:
+      return {
+        ...state,
+        loading: false,
+        currencyArray: action.payload.currencyArray,
+        myCoins: action.payload.myCoins,
+        user: action.payload.user,
+        walletDifference: action.payload.walletDifference,
+        walletValue: action.payload.walletValue,
+        id: action.payload._id
+      };
+    case CLEAR_TRADE_OBJECT:
+      return {
+        ...state,
+        myCoins: [],
+        currencyArray: ["BTC", "ETH", "LTC"],
+        walletValue: "0.00",
+        walletValueDifference: "0.00",
+        user: null,
+        id: null
+      };
+    case PORTFOLIO_LOADING:
+      return {
+        ...state,
+        loading: true
       };
     default:
       return state;
