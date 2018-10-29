@@ -44,7 +44,7 @@ class Coin extends Component {
   render() {
     const { selectedCoin } = this.state;
     const { screenWidth, auth } = this.props;
-    const { myCoins, currencyArray, coinLoading } = this.props.trade;
+    const { myCoins, currencyArray } = this.props.trade;
     const transitionOptions = {
       transitionName: "fade",
       transitionEnterTimeout: 400,

@@ -6,7 +6,6 @@ import {
   UPDATE_WALLET_VALUE_DIFFERENCE,
   GET_PORTFOLIO,
   PORTFOLIO_LOADING,
-  COIN_LOADING,
   CLEAR_TRADE_OBJECT
 } from "./types";
 import api from "../api";
@@ -73,7 +72,7 @@ export const createExchangeRateObject = rates => dispatch => {
       existingTotalValue = "0.00";
 
     // If there is a holding with totalValue, return that. Otherwise return 0.00
-    myCoins.map(coin => {
+    myCoins.forEach(coin => {
       if (cur === coin.name) {
         existingHolding = coin.holding;
         existingTotalValue = coin.totalValue;
@@ -108,7 +107,7 @@ export const populateCoinObjectWithAvatar = () => dispatch => {
 
   if (currencyArray.length) {
     if (allCoins.length && myCoins.length) {
-      myCoins.map((currency, index) => {
+      myCoins.forEach((currency, index) => {
         let coinIndex = allCoins.findIndex(coin => coin.name === currency.name);
         rates[index].avatar = allCoins[coinIndex].avatar;
         rates[index].coinName = allCoins[coinIndex].coinName;
@@ -123,7 +122,6 @@ export const populateCoinObjectWithAvatar = () => dispatch => {
 
 // Add a new coin
 export const addCoin = selectedCoin => dispatch => {
-  dispatch(setCoinLoading());
   let newArray = [...store.getState().trade.currencyArray];
   const { isAuthenticated } = store.getState().auth;
   newArray.unshift(selectedCoin);
@@ -384,13 +382,6 @@ export const updateRatesEvery10Sec = () => dispatch => {
 export const setPortfolioLoading = () => {
   return {
     type: PORTFOLIO_LOADING
-  };
-};
-
-// Coin container loading
-export const setCoinLoading = () => {
-  return {
-    type: COIN_LOADING
   };
 };
 

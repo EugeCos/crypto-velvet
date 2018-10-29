@@ -6,13 +6,11 @@ import {
   UPDATE_WALLET_VALUE_DIFFERENCE,
   GET_PORTFOLIO,
   CLEAR_TRADE_OBJECT,
-  PORTFOLIO_LOADING,
-  COIN_LOADING
+  PORTFOLIO_LOADING
 } from "../actions/types";
 
 const initialState = {
   loading: false,
-  coinLoading: false,
   allCoins: [],
   myCoins: [],
   currencyArray: ["BTC", "ETH", "LTC"],
@@ -74,11 +72,6 @@ export default function(state = initialState, action) {
       return {
         ...state,
         loading: true
-      };
-    case COIN_LOADING:
-      return {
-        ...state,
-        coinLoading: true
       };
     default:
       return state;
