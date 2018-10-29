@@ -99,7 +99,6 @@ export const createExchangeRateObject = rates => dispatch => {
 
 // Add coin names and avatars to each of User's coins
 export const populateCoinObjectWithAvatar = () => dispatch => {
-  const { isAuthenticated } = store.getState().auth;
   const { allCoins, myCoins, currencyArray } = store.getState().trade;
   let rates;
   if (myCoins) {
@@ -124,17 +123,36 @@ export const populateCoinObjectWithAvatar = () => dispatch => {
 // Add a new coin
 export const addCoin = selectedCoin => dispatch => {
   let newArray = [...store.getState().trade.currencyArray];
+  const { isAuthenticated } = store.getState().auth;
   newArray.unshift(selectedCoin);
-  dispatch({
-    type: UPDATE_CURRENCY_ARRAY,
-    payload: newArray
-  });
-  dispatch(fetchDataForNewCoins(selectedCoin));
+
+  // If user is logged in, post Currency Array to back end
+  if (isAuthenticated) {
+    axios
+      .post("/api/trade/update-currency-array", newArray)
+      .then(res =>
+        dispatch({
+          type: UPDATE_CURRENCY_ARRAY,
+          payload: res.data.currencyArray
+        })
+      )
+      .then(() => dispatch(fetchDataForNewCoins(selectedCoin)))
+      .catch(err => console.log(err));
+  }
+  // If not logged in, post only to front end
+  else {
+    dispatch({
+      type: UPDATE_CURRENCY_ARRAY,
+      payload: newArray
+    });
+    dispatch(fetchDataForNewCoins(selectedCoin));
+  }
 };
 
 // Fetch data for new coins from CryptoCompare API
 export const fetchDataForNewCoins = coin => dispatch => {
   const { myCoins, allCoins, currencyArray } = store.getState().trade;
+  const { isAuthenticated } = store.getState().auth;
 
   let newCoin, coinArrayCopy, coinIndex;
   coinArrayCopy = [...myCoins];
@@ -156,10 +174,21 @@ export const fetchDataForNewCoins = coin => dispatch => {
       coinName: allCoins[coinIndex].coinName
     };
     coinArrayCopy.unshift(newCoin);
-    dispatch({
-      type: UPDATE_MY_COINS_LIST,
-      payload: coinArrayCopy
-    });
+
+    // If user is logged in, post My Coins to back end
+    if (isAuthenticated) {
+      axios
+        .post("/api/trade/update-my-coins-array", coinArrayCopy)
+        .then(res => console.log(res.data))
+        .catch(err => console.log(err));
+    }
+    // If not logged in, post only to front end
+    else {
+      dispatch({
+        type: UPDATE_MY_COINS_LIST,
+        payload: coinArrayCopy
+      });
+    }
   };
 
   api
@@ -175,27 +204,38 @@ export const fetchDataForNewCoins = coin => dispatch => {
       // If request is successful
       else {
         let response = myJson.RAW[coin].USD;
-        if (myCoins.length) {
-          newCoin = {
-            name: coin,
-            rateToUSD: limitDecimals(response.PRICE),
-            percentChange24Hr: `${response.CHANGEPCT24HOUR.toFixed(2)}%`,
-            high24Hr: limitDecimals(response.HIGH24HOUR),
-            low24Hr: limitDecimals(response.LOW24HOUR),
-            holding: 0,
-            totalValue: "0.00",
-            avatar: allCoins[coinIndex].avatar,
-            coinName: allCoins[coinIndex].coinName
-          };
-          coinArrayCopy.unshift(newCoin);
+        // if (myCoins.length) {
+        newCoin = {
+          name: coin,
+          rateToUSD: limitDecimals(response.PRICE),
+          percentChange24Hr: `${response.CHANGEPCT24HOUR.toFixed(2)}%`,
+          high24Hr: limitDecimals(response.HIGH24HOUR),
+          low24Hr: limitDecimals(response.LOW24HOUR),
+          holding: 0,
+          totalValue: "0.00",
+          avatar: allCoins[coinIndex].avatar,
+          coinName: allCoins[coinIndex].coinName
+        };
+        coinArrayCopy.unshift(newCoin);
+
+        // If user is logged in, post My Coins to back end
+        if (isAuthenticated) {
+          axios
+            .post("/api/trade/update-my-coins-array", coinArrayCopy)
+            .then(res => console.log(res.data))
+            .catch(err => console.log(err));
+        }
+        // If not logged in, post only to front end
+        else {
           dispatch({
             type: UPDATE_MY_COINS_LIST,
             payload: coinArrayCopy
           });
-        } else {
-          dispatch(fetchRates(currencyArray));
         }
+        // } else {
+        dispatch(fetchRates(currencyArray));
       }
+      // }
     })
     .catch(error => console.log(error));
 };
@@ -292,12 +332,10 @@ export const updateRatesEvery10Sec = () => dispatch => {
         return res.json();
       })
       .then(myJson => {
-        // if (res.status === 200) {
         arrayWithUpdatedRates.forEach(
           coin =>
             (coin.rateToUSD = limitDecimals(myJson.RAW[coin.name].USD.PRICE))
         );
-        // }
       })
       .catch(error => console.log(error));
 

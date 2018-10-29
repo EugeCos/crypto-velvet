@@ -25,10 +25,7 @@ import "./css/global.less";
 import { store } from "./store";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { clearCurrentProfile } from "./actions/profileActions";
-import {
-  getAllCoinsWithAvatars,
-  getCurrentPortfolio
-} from "./actions/tradeActions";
+import { getAllCoinsWithAvatars } from "./actions/tradeActions";
 
 // ----------UTILITY FUNCITONS-----------
 import setAuthToken from "./utils/setAuthToken";

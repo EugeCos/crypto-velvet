@@ -51,6 +51,8 @@ class Coin extends Component {
       transitionLeaveTimeout: 400
     };
 
+    const myCoinsCopy = [...myCoins];
+
     const dialogStyle =
       screenWidth > 480
         ? {

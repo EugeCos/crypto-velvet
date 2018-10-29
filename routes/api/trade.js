@@ -6,8 +6,8 @@ const passport = require("passport");
 // Models
 const Portfolio = require("../../models/Trade");
 
-// @ route     POST api/trade/create-portfolio
-// @ desc      Create empty portfolio object when user registers
+// @ route     GET api/trade/
+// @ desc      Get user's poretfolio
 // @ access    Private
 router.get(
   "/",
@@ -46,6 +46,40 @@ router.post(
         console.log("Empty portfolio already created");
       }
     });
+  }
+);
+
+// @ route     POST api/trade/update-currency-array
+// @ desc      Update User's currency array
+// @ access    Private
+router.post(
+  "/update-currency-array",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Portfolio.findOneAndUpdate(
+      { user: req.user.id },
+      { currencyArray: req.body },
+      { new: true }
+    )
+      .then(portfolio => res.json(portfolio))
+      .catch(err => console.log(err));
+  }
+);
+
+// @ route     POST api/trade/update-my-coins-array
+// @ desc      Update User's coin list
+// @ access    Private
+router.post(
+  "/update-my-coins-array",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Portfolio.findOneAndUpdate(
+      { user: req.user.id },
+      { myCoins: req.body },
+      { new: true }
+    )
+      .then(updatedCoinsList => res.json(updatedCoinsList))
+      .catch(err => console.log(err));
   }
 );
 

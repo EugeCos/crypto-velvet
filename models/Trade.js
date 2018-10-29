@@ -15,7 +15,7 @@ const PortfolioSchema = new Schema({
       avatar: { type: String },
       name: { type: String },
       coinName: { type: String },
-      high24Hr: { type: Number },
+      high24Hr: { type: String },
       low24Hr: { type: String },
       percentChange24Hr: { type: String },
       rateToUSD: { type: Number },
