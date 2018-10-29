@@ -8,7 +8,7 @@ import {
 } from "./types";
 import setAuthToken from "../utils/setAuthToken";
 import { store } from "../store";
-import { clearTradeObject } from "./tradeActions";
+import { clearTradeObject, getCurrentPortfolio } from "./tradeActions";
 
 // Register user
 export const registerUser = (userData, history) => dispatch => {
@@ -47,6 +47,9 @@ export const loginUser = userData => dispatch => {
 
       // Set current user
       dispatch(setCurrentUser(decoded));
+
+      // Get user's portfolio
+      dispatch(getCurrentPortfolio());
     })
     .catch(err =>
       dispatch({

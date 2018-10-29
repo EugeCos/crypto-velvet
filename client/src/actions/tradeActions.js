@@ -6,6 +6,7 @@ import {
   UPDATE_WALLET_VALUE_DIFFERENCE,
   GET_PORTFOLIO,
   PORTFOLIO_LOADING,
+  COIN_LOADING,
   CLEAR_TRADE_OBJECT
 } from "./types";
 import api from "../api";
@@ -122,6 +123,7 @@ export const populateCoinObjectWithAvatar = () => dispatch => {
 
 // Add a new coin
 export const addCoin = selectedCoin => dispatch => {
+  dispatch(setCoinLoading());
   let newArray = [...store.getState().trade.currencyArray];
   const { isAuthenticated } = store.getState().auth;
   newArray.unshift(selectedCoin);
@@ -179,7 +181,12 @@ export const fetchDataForNewCoins = coin => dispatch => {
     if (isAuthenticated) {
       axios
         .post("/api/trade/update-my-coins-array", coinArrayCopy)
-        .then(res => console.log(res.data))
+        .then(res =>
+          dispatch({
+            type: UPDATE_MY_COINS_LIST,
+            payload: coinArrayCopy
+          })
+        )
         .catch(err => console.log(err));
     }
     // If not logged in, post only to front end
@@ -243,6 +250,7 @@ export const fetchDataForNewCoins = coin => dispatch => {
 // Delete a coin
 export const deleteCoin = name => dispatch => {
   const { myCoins, currencyArray } = store.getState().trade;
+  const { isAuthenticated } = store.getState().auth;
 
   let newCurrencyArray = [...currencyArray],
     newMyCoinsArray = [...myCoins];
@@ -251,14 +259,37 @@ export const deleteCoin = name => dispatch => {
   newCurrencyArray.splice(coinIndex, 1);
   newMyCoinsArray.splice(coinIndex, 1);
 
-  dispatch({
-    type: UPDATE_CURRENCY_ARRAY,
-    payload: newCurrencyArray
-  });
-  dispatch({
-    type: UPDATE_MY_COINS_LIST,
-    payload: newMyCoinsArray
-  });
+  if (isAuthenticated) {
+    axios
+      .post("/api/trade/update-currency-array", newCurrencyArray)
+      .then(res =>
+        dispatch({
+          type: UPDATE_CURRENCY_ARRAY,
+          payload: res.data.currencyArray
+        })
+      )
+      .catch(err => console.log(err));
+
+    axios
+      .post("/api/trade/update-my-coins-array", newMyCoinsArray)
+      .then(res =>
+        dispatch({
+          type: UPDATE_MY_COINS_LIST,
+          payload: res.data.myCoins
+        })
+      )
+      .catch(err => console.log(err));
+  } else {
+    dispatch({
+      type: UPDATE_CURRENCY_ARRAY,
+      payload: newCurrencyArray
+    });
+    dispatch({
+      type: UPDATE_MY_COINS_LIST,
+      payload: newMyCoinsArray
+    });
+  }
+
   dispatch(updateWallet(newMyCoinsArray));
 };
 
@@ -332,10 +363,11 @@ export const updateRatesEvery10Sec = () => dispatch => {
         return res.json();
       })
       .then(myJson => {
-        arrayWithUpdatedRates.forEach(
-          coin =>
-            (coin.rateToUSD = limitDecimals(myJson.RAW[coin.name].USD.PRICE))
-        );
+        arrayWithUpdatedRates.forEach(coin => {
+          if (coin.high24Hr !== "N/a") {
+            coin.rateToUSD = limitDecimals(myJson.RAW[coin.name].USD.PRICE);
+          }
+        });
       })
       .catch(error => console.log(error));
 
@@ -352,6 +384,13 @@ export const updateRatesEvery10Sec = () => dispatch => {
 export const setPortfolioLoading = () => {
   return {
     type: PORTFOLIO_LOADING
+  };
+};
+
+// Coin container loading
+export const setCoinLoading = () => {
+  return {
+    type: COIN_LOADING
   };
 };
 
