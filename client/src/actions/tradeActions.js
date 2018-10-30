@@ -276,6 +276,7 @@ export const deleteCoin = name => dispatch => {
           payload: res.data.myCoins
         })
       )
+      .then(res => dispatch(updateWallet(res.payload))) //
       .catch(err => console.log(err));
   } else {
     dispatch({
@@ -286,9 +287,8 @@ export const deleteCoin = name => dispatch => {
       type: UPDATE_MY_COINS_LIST,
       payload: newMyCoinsArray
     });
+    dispatch(updateWallet(newMyCoinsArray));
   }
-
-  dispatch(updateWallet(newMyCoinsArray));
 };
 
 // Buy or sell coins
@@ -298,12 +298,25 @@ export const tradeCoins = (
   selectedCoinName
 ) => dispatch => {
   const { myCoins } = store.getState().trade;
+  const { isAuthenticated } = store.getState().auth;
   let coinArrayCopy = [...myCoins];
   let coinIndex = myCoins.findIndex(coin => coin.name === selectedCoinName);
   let newArray = coinArrayCopy[coinIndex];
 
   newArray.holding = Number(newArray.holding) + numberOfTradedCoins;
   newArray.totalValue = Number(newArray.totalValue) + tradeValue;
+
+  if (isAuthenticated) {
+    axios
+      .post("/api/trade/update-my-coins-array", coinArrayCopy)
+      .then(res =>
+        dispatch({
+          type: UPDATE_MY_COINS_LIST,
+          payload: res.data.myCoins
+        })
+      )
+      .catch(err => console.log(err));
+  }
 
   dispatch({
     type: UPDATE_MY_COINS_LIST,
@@ -315,11 +328,24 @@ export const tradeCoins = (
 // Update wallet value
 export const updateWallet = myCoins => dispatch => {
   let coinArrayCopy = [...myCoins];
+  const { isAuthenticated } = store.getState().auth;
   let walletValue = 0;
 
   coinArrayCopy.map(coin => {
     return (walletValue += Number(coin.totalValue));
   });
+
+  if (isAuthenticated) {
+    axios
+      .post("/api/trade/update-wallet", { value: walletValue })
+      .then(res =>
+        dispatch({
+          type: UPDATE_WALLET_VALUE,
+          payload: res.data.walletValue
+        })
+      )
+      .catch(err => console.log(err));
+  }
 
   dispatch({
     type: UPDATE_WALLET_VALUE,
@@ -330,6 +356,7 @@ export const updateWallet = myCoins => dispatch => {
 // Update wallet difference value
 export const checkWalletStatus = () => dispatch => {
   const { myCoins, walletValue } = store.getState().trade;
+  const { isAuthenticated } = store.getState().auth;
 
   let newPotentialWalletValue = 0;
 
@@ -341,16 +368,31 @@ export const checkWalletStatus = () => dispatch => {
     Math.abs(newPotentialWalletValue) - Math.abs(walletValue)
   ).toFixed(2);
 
-  dispatch({
-    type: UPDATE_WALLET_VALUE_DIFFERENCE,
-    payload: difference
-  });
+  if (isAuthenticated) {
+    axios
+      .post("/api/trade/update-wallet-value-difference", {
+        value: difference
+      })
+      .then(res =>
+        dispatch({
+          type: UPDATE_WALLET_VALUE_DIFFERENCE,
+          payload: res.data.walletDifference
+        })
+      )
+      .catch(err => console.log(err));
+  } else {
+    dispatch({
+      type: UPDATE_WALLET_VALUE_DIFFERENCE,
+      payload: difference
+    });
+  }
 };
 
 // Check for rates' value updates every 10 seconds
 export const updateRatesEvery10Sec = () => dispatch => {
   console.log("Update rates ran");
   const { myCoins, currencyArray } = store.getState().trade;
+  const { isAuthenticated } = store.getState().auth;
   let arrayWithUpdatedRates = [...myCoins];
   let url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${currencyArray}&tsyms=USD`;
 
@@ -369,10 +411,23 @@ export const updateRatesEvery10Sec = () => dispatch => {
       })
       .catch(error => console.log(error));
 
-    dispatch({
-      type: UPDATE_MY_COINS_LIST,
-      payload: arrayWithUpdatedRates
-    });
+    if (isAuthenticated) {
+      axios
+        .post("/api/trade/update-my-coins-array", arrayWithUpdatedRates)
+        .then(res =>
+          dispatch({
+            type: UPDATE_MY_COINS_LIST,
+            payload: res.data.myCoins
+          })
+        )
+        .catch(err => console.log(err));
+    } else {
+      dispatch({
+        type: UPDATE_MY_COINS_LIST,
+        payload: arrayWithUpdatedRates
+      });
+    }
+
     dispatch(checkWalletStatus());
   }
 };

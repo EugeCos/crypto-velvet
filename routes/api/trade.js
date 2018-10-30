@@ -83,4 +83,40 @@ router.post(
   }
 );
 
+// @ route     POST api/trade/update-wallet
+// @ desc      Update User's wallet value
+// @ access    Private
+router.post(
+  "/update-wallet",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Portfolio.findOneAndUpdate(
+      { user: req.user.id },
+      { walletValue: req.body.value },
+      { new: true }
+    )
+      .then(updatedWalletValue => res.json(updatedWalletValue))
+      .catch(err => console.log(err));
+  }
+);
+
+// @ route     POST api/trade/update-wallet-value-difference
+// @ desc      Update User's wallet value difference after rates have updated
+// @ access    Private
+router.post(
+  "/update-wallet-value-difference",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Portfolio.findOneAndUpdate(
+      { user: req.user.id },
+      { walletDifference: req.body.value },
+      { new: true }
+    )
+      .then(updatedWalletValueDifference =>
+        res.json(updatedWalletValueDifference)
+      )
+      .catch(err => console.log(err));
+  }
+);
+
 module.exports = router;

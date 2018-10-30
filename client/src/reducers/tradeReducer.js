@@ -28,13 +28,11 @@ export default function(state = initialState, action) {
     case UPDATE_MY_COINS_LIST:
       return {
         ...state,
-        coinLoading: false,
         myCoins: action.payload
       };
     case UPDATE_CURRENCY_ARRAY:
       return {
         ...state,
-        coinLoading: false,
         currencyArray: action.payload
       };
     case UPDATE_WALLET_VALUE:
@@ -54,7 +52,7 @@ export default function(state = initialState, action) {
         currencyArray: action.payload.currencyArray,
         myCoins: action.payload.myCoins,
         user: action.payload.user,
-        walletDifference: action.payload.walletDifference,
+        walletValueDifference: action.payload.walletDifference,
         walletValue: action.payload.walletValue,
         id: action.payload._id
       };
