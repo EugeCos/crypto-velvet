@@ -209,7 +209,7 @@ export const fetchDataForNewCoins = coin => dispatch => {
       // If request is successful
       else {
         let response = myJson.RAW[coin].USD;
-        // if (myCoins.length) {
+
         newCoin = {
           name: coin,
           rateToUSD: limitDecimals(response.PRICE),
@@ -240,7 +240,6 @@ export const fetchDataForNewCoins = coin => dispatch => {
         // } else {
         dispatch(fetchRates(currencyArray));
       }
-      // }
     })
     .catch(error => console.log(error));
 };

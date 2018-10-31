@@ -57,19 +57,21 @@ class AddCoin extends Component {
           e.coinName.substr(0, searchValue.length).toUpperCase()
         ) {
           suggestions.push(e);
-          if (screenWidth < 1024 && screenWidth > 481) {
-            return suggestions.length < 5
-              ? suggestions
-              : (suggestions.length = 5);
-          } else if (screenWidth < 480) {
-            return suggestions.length < 4
-              ? suggestions
-              : (suggestions.length = 4);
-          } else {
-            return suggestions.length < 6
-              ? suggestions
-              : (suggestions.length = 6);
-          }
+
+          // Limiting search length depending on screen width
+          // if (screenWidth < 1024 && screenWidth > 481) {
+          //   return suggestions.length < 5
+          //     ? suggestions
+          //     : (suggestions.length = 5);
+          // } else if (screenWidth < 480) {
+          //   return suggestions.length < 4
+          //     ? suggestions
+          //     : (suggestions.length = 4);
+          // } else {
+          //   return suggestions.length < 6
+          //     ? suggestions
+          //     : (suggestions.length = 6);
+          // }
         }
 
         return suggestions;
@@ -80,19 +82,21 @@ class AddCoin extends Component {
           e.name.substr(0, searchValue.length).toUpperCase()
         ) {
           suggestions.push(e);
-          if (screenWidth < 1024 && screenWidth > 481) {
-            return suggestions.length < 5
-              ? suggestions
-              : (suggestions.length = 5);
-          } else if (screenWidth < 480) {
-            return suggestions.length < 4
-              ? suggestions
-              : (suggestions.length = 4);
-          } else {
-            return suggestions.length < 6
-              ? suggestions
-              : (suggestions.length = 6);
-          }
+
+          // Limiting search length depending on screen width
+          // if (screenWidth < 1024 && screenWidth > 481) {
+          //   return suggestions.length < 5
+          //     ? suggestions
+          //     : (suggestions.length = 5);
+          // } else if (screenWidth < 480) {
+          //   return suggestions.length < 4
+          //     ? suggestions
+          //     : (suggestions.length = 4);
+          // } else {
+          //   return suggestions.length < 6
+          //     ? suggestions
+          //     : (suggestions.length = 6);
+          // }
         }
         return suggestions;
       });
@@ -102,7 +106,7 @@ class AddCoin extends Component {
           self.findIndex(t => t.name === coin.name) === index
       );
     }
-    this.setState({ searchList: suggestions });
+    this.setState({ searchList: suggestions.sort().reverse() });
   }
 
   selectCoin = (index, coinCode) => {
@@ -157,13 +161,15 @@ class AddCoin extends Component {
             background: "linear-gradient(to right, #0f0c29, #302b63, #24243e)",
             color: "rgb(227, 214, 255)",
             fontFamily: "Varela Round, sans-serif",
-            minHeight: "500px"
+            minHeight: "500px",
+            maxHeight: "500px"
           }
         : {
             background: "linear-gradient(to right, #0f0c29, #302b63, #24243e)",
             color: "rgb(227, 214, 255)",
             fontFamily: "Varela Round, sans-serif",
-            minHeight: "350px"
+            minHeight: "350px",
+            maxHeight: "350px"
           };
 
     const buttonStyle =
@@ -215,7 +221,7 @@ class AddCoin extends Component {
               onChange={this.handleChange}
             />
           </form>
-          {coinListJSX}
+          <div className="search-result-container">{coinListJSX}</div>
           <br />
           <FloatingActionButton
             backgroundColor={"#B53471"}
