@@ -137,7 +137,7 @@ class AddCoin extends Component {
 
   render() {
     const { searchValue, searchList, selectedIndex, selectedCoin } = this.state;
-    const { screenWidth } = this.props;
+    const { screenWidth, allCoins } = this.props;
 
     const titleStyle =
       screenWidth > 480
@@ -161,15 +161,15 @@ class AddCoin extends Component {
             background: "linear-gradient(to right, #0f0c29, #302b63, #24243e)",
             color: "rgb(227, 214, 255)",
             fontFamily: "Varela Round, sans-serif",
-            minHeight: "500px",
-            maxHeight: "500px"
+            minHeight: "450px",
+            maxHeight: "450px"
           }
         : {
             background: "linear-gradient(to right, #0f0c29, #302b63, #24243e)",
             color: "rgb(227, 214, 255)",
             fontFamily: "Varela Round, sans-serif",
-            minHeight: "350px",
-            maxHeight: "350px"
+            minHeight: "400px",
+            maxHeight: "400px"
           };
 
     const buttonStyle =
@@ -221,7 +221,19 @@ class AddCoin extends Component {
               onChange={this.handleChange}
             />
           </form>
-          <div className="search-result-container">{coinListJSX}</div>
+          {searchList.length ? (
+            <div className="coins-found-container">
+              <p className="coins-found-text">
+                Coins found: <span>{searchList.length}</span>
+              </p>
+              <p className="coins-found-text">
+                Coins in the database: <span>{allCoins.length}</span>
+              </p>
+            </div>
+          ) : null}
+          <div className={searchList.length ? "search-result-container" : ""}>
+            {coinListJSX}
+          </div>
           <br />
           <FloatingActionButton
             backgroundColor={"#B53471"}

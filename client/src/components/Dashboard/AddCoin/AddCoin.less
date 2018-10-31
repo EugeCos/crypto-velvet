@@ -1,3 +1,5 @@
+@import "../../../css/global.less";
+
 .custom-button {
   text-align: center;
   width: 100px;
@@ -32,9 +34,15 @@
 }
 
 .search-result-container {
+  margin-top: 15px;
   min-height: 30px;
   max-height: 340px;
   overflow-y: auto;
+  @media screen and (max-width: 1281px) {
+    min-height: 30px;
+    max-height: 280px;
+    overflow-y: auto;
+  }
   @media screen and (max-width: 480px) {
     min-height: 30px;
     max-height: 230px;
@@ -101,4 +109,32 @@
 
 .selected {
   background: linear-gradient(to right, #834d9b, #d04ed6) !important;
+}
+
+.coins-found-container {
+  display: flex;
+  justify-content: space-around;
+  width: 60%;
+  margin: 0 auto;
+  @media screen and (max-width: 480px) {
+    flex-direction: column;
+    width: 100%;
+    margin: 7px auto 0;
+  }
+}
+
+.coins-found-text {
+  text-align: center;
+  margin-top: 15px;
+  color: #a679b9;
+  font-size: 95%;
+  span {
+    color: rgb(206, 206, 206);
+    @media screen and (max-width: 480px) {
+    }
+  }
+  @media screen and (max-width: 480px) {
+    font-size: 82%;
+    margin-top: 0;
+  }
 }
