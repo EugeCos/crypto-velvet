@@ -73,7 +73,9 @@ class Login extends Component {
     const transitionOptions = {
       transitionName: "fade-effect",
       transitionAppearTimeout: 300,
-      transitionAppear: true
+      transitionAppear: true,
+      transitionEnter: false,
+      transitionLeave: false
     };
 
     return (
