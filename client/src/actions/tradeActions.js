@@ -395,6 +395,10 @@ export const updateRatesEvery10Sec = () => dispatch => {
   let arrayWithUpdatedRates = [...myCoins];
   let url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${currencyArray}&tsyms=USD`;
 
+  let callfun = array => {
+    console.log(array, array[0].rateToUSD);
+  };
+
   if (currencyArray.length) {
     api
       .getRates(url)
@@ -408,26 +412,27 @@ export const updateRatesEvery10Sec = () => dispatch => {
           }
         });
       })
-      .catch(error => console.log(error));
-
-    if (isAuthenticated) {
-      axios
-        .post("/api/trade/update-my-coins-array", arrayWithUpdatedRates)
-        .then(res =>
+      .then(() => {
+        if (isAuthenticated) {
+          callfun(arrayWithUpdatedRates);
+          axios
+            .post("/api/trade/update-my-coins-array", arrayWithUpdatedRates)
+            .then(res =>
+              dispatch({
+                type: UPDATE_MY_COINS_LIST,
+                payload: res.data.myCoins
+              })
+            )
+            .catch(err => console.log(err));
+        } else {
           dispatch({
             type: UPDATE_MY_COINS_LIST,
-            payload: res.data.myCoins
-          })
-        )
-        .catch(err => console.log(err));
-    } else {
-      dispatch({
-        type: UPDATE_MY_COINS_LIST,
-        payload: arrayWithUpdatedRates
-      });
-    }
-
-    dispatch(checkWalletStatus());
+            payload: arrayWithUpdatedRates
+          });
+        }
+        dispatch(checkWalletStatus());
+      })
+      .catch(error => console.log(error));
   }
 };
 

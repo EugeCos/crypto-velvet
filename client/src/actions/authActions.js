@@ -79,7 +79,9 @@ export const logoutUser = history => dispatch => {
   dispatch(setCurrentUser({}));
 
   // Send user to Login page
-  history.push("/login");
+  if (history) {
+    history.push("/");
+  }
 
   // Clear Trade object
   store.dispatch(clearTradeObject());

@@ -73,7 +73,6 @@ router.post(
   "/update-my-coins-array",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    console.log(req.body[0].rateToUSD);
     Portfolio.findOneAndUpdate(
       { user: req.user.id },
       { myCoins: req.body },
