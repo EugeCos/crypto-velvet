@@ -3,9 +3,6 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import "../Auth.less";
 
-// ----------REACT-CSS-TRANSITION-GROUP-----------
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
-
 // -----------COMPONENTS-----------
 import TextFieldGroup from "../../Common/TextFieldGroup";
 import ButtonAction from "../../Common/ButtonAction";
@@ -73,64 +70,54 @@ class Signup extends Component {
     const customWidth =
       screenWidth.screenWidth / (screenWidth.screenWidth > 1024 ? 5.5 : 2.5);
 
-    const transitionOptions = {
-      transitionName: "fade-effect",
-      transitionAppearTimeout: 300,
-      transitionAppear: true,
-      transitionEnter: false,
-      transitionLeave: false
-    };
-
     return (
-      <ReactCSSTransitionGroup {...transitionOptions}>
-        <div className="custom-container">
-          <img src="/img/logo.png" alt="" className="logo" />
-          <h4 className="auth-option-text">Sign Up</h4>
-          <form
-            noValidate
-            style={{ marginTop: "30px" }}
-            onSubmit={this.handleSubmit}
-          >
-            <TextFieldGroup
-              type={"text"}
-              name={"name"}
-              placeholder={"Name"}
-              value={name}
-              handleChange={this.handleChange}
-              error={errors.name}
-              customWidth={customWidth}
-            />
-            <TextFieldGroup
-              type={"email"}
-              name={"email"}
-              placeholder={"Email"}
-              value={email}
-              handleChange={this.handleChange}
-              error={errors.email}
-              customWidth={customWidth}
-            />
-            <TextFieldGroup
-              type={"password"}
-              name={"password"}
-              placeholder={"Password"}
-              value={password}
-              handleChange={this.handleChange}
-              error={errors.password}
-              customWidth={customWidth}
-            />
-            <TextFieldGroup
-              type={"password"}
-              name={"confirmPassword"}
-              placeholder={"Confirm password"}
-              value={confirmPassword}
-              handleChange={this.handleChange}
-              error={errors.confirmPassword}
-              customWidth={customWidth}
-            />
-            <ButtonAction name={"Sign Up"} />
-          </form>
-        </div>
-      </ReactCSSTransitionGroup>
+      <div className="custom-container">
+        <img src="/img/logo.png" alt="" className="logo" />
+        <h4 className="auth-option-text">Sign Up</h4>
+        <form
+          noValidate
+          style={{ marginTop: "30px" }}
+          onSubmit={this.handleSubmit}
+        >
+          <TextFieldGroup
+            type={"text"}
+            name={"name"}
+            placeholder={"Name"}
+            value={name}
+            handleChange={this.handleChange}
+            error={errors.name}
+            customWidth={customWidth}
+          />
+          <TextFieldGroup
+            type={"email"}
+            name={"email"}
+            placeholder={"Email"}
+            value={email}
+            handleChange={this.handleChange}
+            error={errors.email}
+            customWidth={customWidth}
+          />
+          <TextFieldGroup
+            type={"password"}
+            name={"password"}
+            placeholder={"Password"}
+            value={password}
+            handleChange={this.handleChange}
+            error={errors.password}
+            customWidth={customWidth}
+          />
+          <TextFieldGroup
+            type={"password"}
+            name={"confirmPassword"}
+            placeholder={"Confirm password"}
+            value={confirmPassword}
+            handleChange={this.handleChange}
+            error={errors.confirmPassword}
+            customWidth={customWidth}
+          />
+          <ButtonAction name={"Sign Up"} />
+        </form>
+      </div>
     );
   }
 }

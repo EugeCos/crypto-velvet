@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route, withRouter } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
 /*-------------FONT-AWESOME-------------*/
@@ -30,6 +30,32 @@ import { getAllCoinsWithAvatars } from "./actions/tradeActions";
 // ----------UTILITY FUNCITONS-----------
 import setAuthToken from "./utils/setAuthToken";
 
+// Check for token in Local Storage
+if (localStorage.jwtToken) {
+  const token = localStorage.jwtToken;
+
+  // Decode token and get user info and expiration
+  const decoded = jwt_decode(token);
+
+  // Check for expired token
+  const currentTime = Date.now() / 1000;
+  if (decoded.exp < currentTime) {
+    // Logout user
+    store.dispatch(logoutUser());
+
+    // Clear current user's profile
+    store.dispatch(clearCurrentProfile());
+    // Redirect to login
+    window.location.href = "/login";
+  }
+
+  // Set auth token header auth
+  setAuthToken(localStorage.jwtToken);
+
+  // Set user and isAuthenticated
+  store.dispatch(setCurrentUser(decoded));
+}
+
 class App extends Component {
   constructor() {
     super();
@@ -40,33 +66,6 @@ class App extends Component {
 
   componentDidMount() {
     store.dispatch(getAllCoinsWithAvatars());
-
-    // Check for token in Local Storage
-    if (localStorage.jwtToken) {
-      const token = localStorage.jwtToken;
-
-      // Decode token and get user info and expiration
-      const decoded = jwt_decode(token);
-
-      // Check for expired token
-      const currentTime = Date.now() / 1000;
-      if (decoded.exp < currentTime) {
-        // Logout user and redirect to login
-        store.dispatch(logoutUser(this.props.history));
-
-        // Clear current user's profile
-        store.dispatch(clearCurrentProfile());
-
-        // Redirect to login
-        // window.location.href = "/login";
-      }
-
-      // Set auth token header auth
-      setAuthToken(localStorage.jwtToken);
-
-      // Set user and isAuthenticated
-      store.dispatch(setCurrentUser(decoded));
-    }
   }
 
   getTimeoutIntervalIndex = intervalIndex => {
@@ -130,4 +129,4 @@ class App extends Component {
   }
 }
 
-export default withRouter(App);
+export default App;

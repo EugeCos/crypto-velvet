@@ -47,7 +47,7 @@ class AddCoin extends Component {
   };
 
   searchCoin() {
-    const { allCoins } = this.props;
+    const { allCoins, screenWidth } = this.props;
     const { searchValue } = this.state;
     let suggestions = [];
     if (searchValue.length > 0 && allCoins.length > 0) {
