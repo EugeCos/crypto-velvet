@@ -80,7 +80,7 @@ export const logoutUser = history => dispatch => {
 
   // Send user to Login page
   if (history) {
-    history.push("/");
+    history.push("/login");
   }
 
   // Clear Trade object
