@@ -6,6 +6,7 @@ const passport = require("passport");
 // Models
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
+const Portfolio = require("../../models/Trade");
 
 // Validation
 const validateProfileInput = require("../../validation/profile");
@@ -107,7 +108,9 @@ router.delete(
   (req, res) => {
     Profile.findOneAndRemove({ user: req.user.id }).then(() =>
       User.findOneAndRemove({ _id: req.user.id }).then(() =>
-        res.json({ success: true })
+        Portfolio.findOneAndRemove({ user: req.user.id }).then(() =>
+          res.json({ success: true })
+        )
       )
     );
   }
