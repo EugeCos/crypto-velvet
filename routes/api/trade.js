@@ -90,9 +90,13 @@ router.post(
   "/update-wallet",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    console.log(req.body.walletDifference);
     Portfolio.findOneAndUpdate(
       { user: req.user.id },
-      { walletValue: req.body.value },
+      {
+        walletValue: req.body.value,
+        walletDifference: req.body.walletDifference
+      },
       { new: true }
     )
       .then(updatedWalletValue => res.json(updatedWalletValue))

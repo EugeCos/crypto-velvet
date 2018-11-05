@@ -328,7 +328,14 @@ export const tradeCoins = (
 export const updateWallet = myCoins => dispatch => {
   let coinArrayCopy = [...myCoins];
   const { isAuthenticated } = store.getState().auth;
-  let walletValue = 0;
+  const { walletValueDifference } = store.getState().trade;
+  let walletValue = 0,
+    walletDifferenceCopy = walletValueDifference;
+
+  // If coinlist is empty, set walletDifference to 0.00 before sending it to backend
+  if (myCoins.length === 0) {
+    walletDifferenceCopy = "0.00";
+  }
 
   coinArrayCopy.map(coin => {
     return (walletValue += Number(coin.totalValue));
@@ -336,13 +343,25 @@ export const updateWallet = myCoins => dispatch => {
 
   if (isAuthenticated) {
     axios
-      .post("/api/trade/update-wallet", { value: walletValue })
+      .post("/api/trade/update-wallet", {
+        value: walletValue,
+        walletDifference: walletDifferenceCopy
+      })
       .then(res =>
         dispatch({
           type: UPDATE_WALLET_VALUE,
           payload: res.data.walletValue
         })
       )
+      // If there are no coins in myCoins array, set frontend walletDifference to 0.00
+      .then(() => {
+        if (myCoins.length === 0) {
+          dispatch({
+            type: UPDATE_WALLET_VALUE_DIFFERENCE,
+            payload: "0.00"
+          });
+        }
+      })
       .catch(err => console.log(err));
   }
 
@@ -395,10 +414,6 @@ export const updateRatesEvery10Sec = () => dispatch => {
   let arrayWithUpdatedRates = [...myCoins];
   let url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${currencyArray}&tsyms=USD`;
 
-  let callfun = array => {
-    console.log(array, array[0].rateToUSD);
-  };
-
   if (currencyArray.length) {
     api
       .getRates(url)
@@ -414,7 +429,6 @@ export const updateRatesEvery10Sec = () => dispatch => {
       })
       .then(() => {
         if (isAuthenticated) {
-          callfun(arrayWithUpdatedRates);
           axios
             .post("/api/trade/update-my-coins-array", arrayWithUpdatedRates)
             .then(res =>

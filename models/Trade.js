@@ -20,7 +20,11 @@ const PortfolioSchema = new Schema({
       percentChange24Hr: { type: String },
       rateToUSD: { type: Number },
       holding: { type: Number },
-      totalValue: { type: Number }
+      totalValue: { type: Number },
+      date: {
+        type: Date,
+        default: Date.now
+      }
     }
   ]
 });
