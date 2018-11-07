@@ -4,7 +4,7 @@ A full stack web-app that allows users to look up cryptocurrencies and perform b
 
 ## Live Demo
 
-Link to App: [Velvet Crypto](https://crypto-velvet.herokuapp.com)
+Link to App: [Velvet Crypto](https://velvet-crypto.herokuapp.com)
 
 _Please wait for up to 15 seconds as the free Heroku server fires up for the app._
 
